@@ -4,7 +4,7 @@
     <main class="content">
         <div class="container-fluid p-0">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1 class="h3 mb-0"><strong>Show</strong> Purchases</h1>
+                <h1 class="h3 mb-0"><strong>Invoice</h1>
                 <a href="{{ route('backend.purchases.index') }}" class="btn btn-secondary">Back to List</a>
             </div>
 
@@ -18,7 +18,6 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>No</th>
                                 <th>Product</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
@@ -28,7 +27,6 @@
                         <tbody>
                             @foreach ($purchase->purchaseDetails as $index => $detail)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $detail->product->product_name }}</td>
                                     <td>{{ number_format($detail->purchase_price, 0, ',', '.') }}</td>
                                     <td>{{ $detail->qty }}</td>
