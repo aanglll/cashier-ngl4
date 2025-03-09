@@ -4,7 +4,35 @@
     <main class="content">
         <div class="container-fluid p-0">
 
-            <h1 class="h3 mb-3"><strong>Analytics</strong> Dashboard</h1>
+            <div class="d-flex justify-content-between mb-3">
+                <h1 class="h3 mb-3"><strong>Analytics</strong> Dashboard</h1>
+                <div>
+                    <select id="filterRange" class="form-select">
+                        <option value="today" {{ request('filter') == 'today' ? 'selected' : '' }}>Today</option>
+                        <option value="yesterday" {{ request('filter') == 'yesterday' ? 'selected' : '' }}>Yesterday</option>
+                        <option value="this_week" {{ request('filter') == 'this_week' ? 'selected' : '' }}>This Week</option>
+                        <option value="this_month" {{ request('filter') == 'this_month' ? 'selected' : '' }}>This Month
+                        </option>
+                        <option value="previous_month" {{ request('filter') == 'previous_month' ? 'selected' : '' }}>
+                            Previous Month</option>
+                        <option value="this_month_last_year"
+                            {{ request('filter') == 'this_month_last_year' ? 'selected' : '' }}>This Month Last Year
+                        </option>
+                        <option value="this_year" {{ request('filter') == 'this_year' ? 'selected' : '' }}>This Year
+                        </option>
+                        <option value="last_year" {{ request('filter') == 'last_year' ? 'selected' : '' }}>Last Year
+                        </option>
+                        <option value="time_span" {{ request('filter') == 'time_span' ? 'selected' : '' }}>Time Span
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="dateRangeContainer" style="display: none;" class="mb-3">
+                <input type="date" id="startDate" class="form-control d-inline w-auto">
+                <input type="date" id="endDate" class="form-control d-inline w-auto">
+                <button onclick="applyDateFilter()" class="btn btn-primary">Apply</button>
+            </div>
 
             <div class="row">
                 <div class="col-xl-6 col-xxl-5 d-flex">
@@ -59,6 +87,57 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col mt-0">
+                                                <h5 class="card-title">Net</h5>
+                                            </div>
+
+                                            <div class="col-auto">
+                                                <div class="stat text-primary">
+                                                    <i class="align-middle" data-feather="dollar-sign"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h1 class="mt-1 mb-3">{{ number_format($totalNet, 0, ',', '.') }}</h1>
+                                        <div class="mb-0">
+                                            {{-- <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
+                                                5.25% </span>
+                                            <span class="text-muted">Since last week</span> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col mt-0">
+                                                <h5 class="card-title">Total Sale Transaction</h5>
+                                            </div>
+
+                                            <div class="col-auto">
+                                                <div class="stat text-primary">
+                                                    <i class="align-middle" data-feather="dollar-sign"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h1 class="mt-1 mb-3">{{ number_format($totalSaleTransaction, 0, ',', '.') }}</h1>
+                                        <div class="mb-0">
+                                            {{-- <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
+                                                5.25% </span>
+                                            <span class="text-muted">Since last week</span> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6 col-xxl-5 d-flex">
+                    <div class="w-100">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col mt-0">
                                                 <h5 class="card-title">Customer</h5>
                                             </div>
 
@@ -98,13 +177,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-6 col-xxl-5 d-flex">
-                    <div class="w-100">
-                        <div class="row">
                             <div class="col-sm-6">
                                 <div class="card">
                                     <div class="card-body">
@@ -408,4 +480,31 @@
 
         </div>
     </main>
+    <script>
+        document.getElementById('filterRange').addEventListener('change', function() {
+            let filter = this.value;
+            let dateContainer = document.getElementById('dateRangeContainer');
+
+            if (filter === 'time_span') {
+                dateContainer.style.display = 'block';
+            } else {
+                dateContainer.style.display = 'none';
+                applyFilter(filter);
+            }
+        });
+
+        function applyFilter(filter) {
+            window.location.href = "{{ route('home') }}?filter=" + filter;
+        }
+
+        function applyDateFilter() {
+            let startDate = document.getElementById('startDate').value;
+            let endDate = document.getElementById('endDate').value;
+
+            if (startDate && endDate) {
+                window.location.href = "{{ route('home') }}?filter=time_span&start_date=" + startDate + "&end_date=" +
+                    endDate;
+            }
+        }
+    </script>
 @endsection
