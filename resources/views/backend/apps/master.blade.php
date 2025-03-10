@@ -21,6 +21,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    @livewireStyles
 </head>
 
 <body>
@@ -39,6 +41,8 @@
         </div>
 
     </div>
+    @livewireScripts
+
     <script src="{{ asset('assets/js/app.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
@@ -48,7 +52,7 @@
             var gradient = ctx.createLinearGradient(0, 0, 0, 225);
             gradient.addColorStop(0, "rgba(215, 227, 244, 1)");
             gradient.addColorStop(1, "rgba(215, 227, 244, 0)");
-            
+
             new Chart(document.getElementById("chartjs-dashboard-line"), {
                 type: "line",
                 data: {
@@ -299,6 +303,8 @@
             });
         @endif
     </script>
+
+    @stack('scripts')
 
 </body>
 
