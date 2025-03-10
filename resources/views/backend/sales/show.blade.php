@@ -3,16 +3,15 @@
 @section('content')
     <main class="content">
         <div class="container-fluid p-0">
-
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1 class="h3 mb-0"><strong>Invoice</strong></h1>
+                <h1 class="h3 mb-0"><strong>Invoice</h1>
                 <a href="javascript:void(0);" class="btn btn-primary" onclick="printReceipt()">Print this receipt</a>
                 <a href="{{ route('backend.sales.index') }}" class="btn btn-secondary">Back to List</a>
             </div>
 
             <div class="row">
-                <div class="col-2"></div>
-                <div class="col-8" id="printableArea">
+                <div class="col-1"></div>
+                <div class="col-10" id="printableArea">
                     <div class="card">
                         <div class="card-body m-sm-3 m-md-5">
                             <div class="mb-4">

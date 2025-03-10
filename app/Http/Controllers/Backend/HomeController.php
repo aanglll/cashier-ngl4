@@ -28,8 +28,8 @@ class HomeController extends Controller
                 $endDate = Carbon::now()->endOfDay();
                 break;
             case 'yesterday':
-                $startDate = Carbon::yesterday();
-                $endDate = Carbon::yesterday();
+                $startDate = Carbon::now()->subDay()->startOfDay();
+                $endDate = Carbon::now()->subDay()->endOfDay();
                 break;
             case 'this_week':
                 $startDate = Carbon::now()->startOfWeek();
