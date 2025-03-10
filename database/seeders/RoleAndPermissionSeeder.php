@@ -18,11 +18,25 @@ class RoleAndPermissionSeeder extends Seeder
 
         $customerPermissions = ['create customers', 'edit customers', 'delete customers', 'view customers'];
 
+        $supplierPermissions = ['create suppliers', 'edit suppliers', 'delete suppliers', 'view suppliers'];
+
         $userPermissions = ['create users', 'edit users', 'delete users', 'view users'];
 
         $rolePermissions = ['create role', 'edit role', 'delete role', 'view role'];
 
-        foreach (array_merge($productPermissions, $productCategoryPermissions, $productUnitPermissions, $customerPermissions, $userPermissions, $rolePermissions) as $permission) {
+        //
+
+        $salePermissions = ['create sales', 'delete sales', 'view sales'];
+
+        $purchasePermissions = ['create purchases', 'delete purchases', 'view purchases'];
+
+        $stockPermissions = ['view stocks'];
+
+        $dashboardPermissions = ['view dashboards'];
+
+        $settingPermissions = ['edit settings', 'view settings'];
+
+        foreach (array_merge($productPermissions, $productCategoryPermissions, $productUnitPermissions, $customerPermissions, $userPermissions, $rolePermissions, $supplierPermissions, $salePermissions, $purchasePermissions, $stockPermissions, $dashboardPermissions, $settingPermissions) as $permission) {
             if (!Permission::where('name', $permission)->exists()) {
                 Permission::create(['name' => $permission]);
             }
@@ -33,16 +47,17 @@ class RoleAndPermissionSeeder extends Seeder
         $roleOfficer = Role::firstOrCreate(['name' => 'officer']);
         $roleWarehouseAdmin = Role::firstOrCreate(['name' => 'warehouse admin']);
 
-        $roleSuperAdmin->syncPermissions(array_merge($productPermissions, $productCategoryPermissions, $productUnitPermissions, $customerPermissions, $userPermissions, $rolePermissions));
+        $roleSuperAdmin->syncPermissions(array_merge($productPermissions, $productCategoryPermissions, $productUnitPermissions, $customerPermissions, $userPermissions, $rolePermissions, $supplierPermissions, $dashboardPermissions, $settingPermissions, $salePermissions, $purchasePermissions, $stockPermissions));
 
-        $roleAdmin->syncPermissions(array_merge($productPermissions, $productCategoryPermissions, $productUnitPermissions, $customerPermissions, $userPermissions, $rolePermissions));
+        $roleAdmin->syncPermissions(array_merge($productPermissions, $productCategoryPermissions, $productUnitPermissions, $customerPermissions, $userPermissions, $rolePermissions, $supplierPermissions, $dashboardPermissions, $settingPermissions, $salePermissions, $purchasePermissions, $stockPermissions));
 
         $officerPermissions = array_diff($customerPermissions, ['delete customers']);
-        $roleOfficer->syncPermissions(array_merge($officerPermissions, ['view products']));
+        $roleOfficer->syncPermissions(array_merge($officerPermissions, ['view products'], ['create sales']));
 
         $productPermissionsForWarehouseAdmin = ['view products'];
         $productCategoryPermissionsForWarehouseAdmin = ['view product categories'];
-        $roleWarehouseAdmin->syncPermissions(array_merge($productPermissionsForWarehouseAdmin, $productCategoryPermissionsForWarehouseAdmin));
+        $supplierWarehouseAdminPermissions = array_diff($supplierPermissions, ['delete suppliers']);
+        $roleWarehouseAdmin->syncPermissions(array_merge($productPermissionsForWarehouseAdmin, $productCategoryPermissionsForWarehouseAdmin, $supplierWarehouseAdminPermissions, ['create purchases']));
 
         // $user = \App\Models\User::find(1);
         // if ($user) {

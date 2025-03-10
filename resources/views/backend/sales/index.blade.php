@@ -20,7 +20,7 @@
                             {{-- <th>Sale ID</th> --}}
                             <th>Date</th>
                             <th>Customer</th>
-                            {{-- <th>User</th> --}}
+                            <th>User</th>
                             <th>Total Price</th>
                             {{-- <th>Status</th> --}}
                             {{-- <th>Cash Return</th> --}}
@@ -34,7 +34,7 @@
                                 {{-- <td>{{ $sale->id }}</td> --}}
                                 <td>{{ $sale->created_at->translatedFormat('l, d M Y H:i:s') }}</td>
                                 <td>{{ $sale->customer->name }}</td>
-                                {{-- <td>{{ $sale->user->name }}</td> --}}
+                                <td>{{ $sale->user->name }}</td>
                                 <td>{{ number_format($sale->total_price, 0, ',', '.') }}</td>
                                 {{-- <td>{{ $sale->status }}</td> --}}
                                 {{-- <td>{{ number_format($sale->cash_return, 2) }}</td> --}}

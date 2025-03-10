@@ -11,10 +11,11 @@
                         <option value="today" {{ request('filter') == 'today' ? 'selected' : '' }}>Today</option>
                         <option value="yesterday" {{ request('filter') == 'yesterday' ? 'selected' : '' }}>Yesterday</option>
                         <option value="this_week" {{ request('filter') == 'this_week' ? 'selected' : '' }}>This Week</option>
+                        <option value="last_week" {{ request('filter') == 'last_week' ? 'selected' : '' }}>Last Week</option>
                         <option value="this_month" {{ request('filter') == 'this_month' ? 'selected' : '' }}>This Month
                         </option>
-                        <option value="previous_month" {{ request('filter') == 'previous_month' ? 'selected' : '' }}>
-                            Previous Month</option>
+                        <option value="last_month" {{ request('filter') == 'last_month' ? 'selected' : '' }}>
+                            Last Month</option>
                         <option value="this_month_last_year"
                             {{ request('filter') == 'this_month_last_year' ? 'selected' : '' }}>This Month Last Year
                         </option>

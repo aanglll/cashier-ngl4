@@ -13,10 +13,10 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 
-    public function boot()
-    {
-        // Set locale Carbon ke Bahasa Indonesia
-        Config::set('app.locale', 'id');
-        Carbon::setLocale('id');
-    }
+    // public function boot()
+    // {
+    //     // Set locale Carbon ke Bahasa Indonesia
+    //     Config::set('app.locale', 'id');
+    //     Carbon::setLocale('id');
+    // }
 }

@@ -19,6 +19,7 @@
                             <th>#</th>
                             <th>Date</th>
                             <th>Supplier</th>
+                            <th>User</th>
                             <th>Total Price</th>
                             <th>Actions</th>
                         </tr>
@@ -29,6 +30,7 @@
                                 <td>{{ $purchases->total() - ($purchases->currentPage() - 1) * $purchases->perPage() - $loop->index }}</td>
                                 <td>{{ $purchase->created_at->translatedFormat('l, d M Y H:i:s') }}</td>
                                 <td>{{ $purchase->supplier->name }}</td>
+                                <td>{{ $purchase->user->name }}</td>
                                 <td>{{ number_format($purchase->total_price, 0, ',', '.') }}</td>
                                 <td>
                                     <a href="{{ route('backend.purchases.show', $purchase->id) }}" class="btn btn-sm btn-info">

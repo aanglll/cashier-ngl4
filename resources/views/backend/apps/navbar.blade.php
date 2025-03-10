@@ -12,7 +12,7 @@
                     </div>
                 </a>
             </li> --}}
-            <li class="nav-item dropdown">
+            {{-- <li class="nav-item dropdown">
                 <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
                     <div class="position-relative">
                         <i class="align-middle" data-feather="bell"></i>
@@ -78,7 +78,7 @@
                         <a href="#" class="text-muted">Show all notifications</a>
                     </div>
                 </div>
-            </li>
+            </li> --}}
             {{-- <li class="nav-item dropdown">
                 <a class="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-bs-toggle="dropdown">
                     <div class="position-relative">
@@ -152,6 +152,13 @@
                     </div>
                 </div>
             </li> --}}
+            <li class="nav-item">
+                <a class="nav-icon js-fullscreen d-none d-lg-block" href="javascript:void(0);" onclick="toggleFullscreen()">
+                    <div class="position-relative">
+                        <i class="align-middle" data-feather="maximize"></i>
+                    </div>
+                </a>
+            </li>
             <li class="nav-item dropdown">
                 <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
                     <i class="align-middle" data-feather="settings"></i>

@@ -34,10 +34,16 @@
                                 <!-- Permissions Section -->
                                 @php
                                     $permissionSections = [
+                                        'Dashboard' => 'dashboards',
+                                        'Sale' => 'sales',
+                                        'Purchase' => 'purchases',
+                                        'Stock' => 'stocks',
                                         'Product' => 'products',
                                         'Product Category' => 'product categories',
                                         'Product Unit' => 'product units',
+                                        'Supplier' => 'suppliers',
                                         'Customer' => 'customers',
+                                        'Setting' => 'settings',
                                         'User' => 'users',
                                         'Role' => 'role'
                                     ];

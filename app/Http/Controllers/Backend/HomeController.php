@@ -18,13 +18,14 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $filter = $request->query('filter', 'today');
+
         $startDate = null;
         $endDate = null;
 
         switch ($filter) {
             case 'today':
-                $startDate = Carbon::today();
-                $endDate = Carbon::today();
+                $startDate = Carbon::now()->startOfDay();
+                $endDate = Carbon::now()->endOfDay();
                 break;
             case 'yesterday':
                 $startDate = Carbon::yesterday();
@@ -34,11 +35,15 @@ class HomeController extends Controller
                 $startDate = Carbon::now()->startOfWeek();
                 $endDate = Carbon::now()->endOfWeek();
                 break;
+            case 'last_week':
+                $startDate = Carbon::now()->subWeek()->startOfWeek();
+                $endDate = Carbon::now()->subWeek()->endOfWeek();
+                break;
             case 'this_month':
                 $startDate = Carbon::now()->startOfMonth();
                 $endDate = Carbon::now()->endOfMonth();
                 break;
-            case 'previous_month':
+            case 'last_month':
                 $startDate = Carbon::now()->subMonth()->startOfMonth();
                 $endDate = Carbon::now()->subMonth()->endOfMonth();
                 break;

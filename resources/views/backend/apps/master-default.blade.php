@@ -28,15 +28,9 @@
 <body>
     <div class="wrapper">
 
-        @include('backend.apps.sidebar')
-
         <div class="main">
 
-            @include('backend.apps.navbar')
-
             @yield('content')
-
-            @include('backend.apps.footer')
 
         </div>
 
@@ -302,18 +296,6 @@
                 }
             });
         @endif
-    </script>
-
-    <script>
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    console.error(`Error attempting to enable fullscreen: ${err.message}`);
-                });
-            } else {
-                document.exitFullscreen();
-            }
-        }
     </script>
 
     @stack('scripts')

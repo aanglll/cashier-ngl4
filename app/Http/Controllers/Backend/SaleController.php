@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductUnit;
 use App\Models\Stock;
+use App\Models\User;
 
 class SaleController extends Controller
 {

@@ -6,11 +6,13 @@
 
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1 class="h3 mb-0"><strong>Invoice</strong></h1>
+                <a href="javascript:void(0);" class="btn btn-primary" onclick="printReceipt()">Print this receipt</a>
                 <a href="{{ route('backend.sales.index') }}" class="btn btn-secondary">Back to List</a>
             </div>
 
             <div class="row">
-                <div class="col-12">
+                <div class="col-2"></div>
+                <div class="col-8" id="printableArea">
                     <div class="card">
                         <div class="card-body m-sm-3 m-md-5">
                             <div class="mb-4">
@@ -20,19 +22,27 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-6 col-md-2">
+                                <div class="col-6 col-md-6">
                                     <div class="text-muted">Payment No.</div>
                                     <div class="fw-bold">{{ $sale->id }}</div>
                                 </div>
-                                <div class="col-6 col-md-4">
+                                <div class="col-6 col-md-6">
+                                    <div class="text-muted">Payment Date</div>
+                                    <div class="fw-bold">{{ $sale->created_at->translatedFormat('l, d M Y H:i:s') }}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-6">
                                     @if ($sale->customer->name)
                                         <div class="text-muted">Customer</div>
                                         <div class="fw-bold">{{ $sale->customer->name }}</div>
                                     @endif
                                 </div>
-                                <div class="col-12 col-md-6 text-md-end">
-                                    <div class="text-muted">Payment Date</div>
-                                    <div class="fw-bold">{{ $sale->created_at->translatedFormat('l, d M Y H:i:s') }}</div>
+                                <div class="col-6 col-md-6">
+                                    @if ($sale->user->name)
+                                        <div class="text-muted">Officer</div>
+                                        <div class="fw-bold">{{ $sale->user->name }}</div>
+                                    @endif
                                 </div>
                             </div>
 
@@ -105,9 +115,6 @@
                                     Thank you for shopping with us! We look forward to serving you again.
                                 </p>
 
-                                <a href="#" class="btn btn-primary">
-                                    Print this receipt
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -116,4 +123,16 @@
 
         </div>
     </main>
+
+    <script>
+        function printReceipt() {
+            var printContents = document.getElementById("printableArea").innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload(); // Reload halaman agar kembali normal setelah cetak
+        }
+    </script>
 @endsection
