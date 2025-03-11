@@ -167,48 +167,7 @@
                             data-bs-target="#createCustomerModal">Create Customer</button>
 
                         <h5>Sales Details</h5>
-
-                        {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-                            rel="stylesheet"
-                            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-                            crossorigin="anonymous"> --}}
-
-                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-                            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-                        </script>
-
-                        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js"
-                            integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ=="
-                            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-                        <style>
-                            #reader {
-                                width: 400px;
-
-                                border-radius: 30px;
-                            }
-
-                            @media (max-width: 768px) {
-                                #reader {
-                                    width: 90%;
-                                    max-width: 300px;
-                                    border-radius: 20px;
-                                }
-                            }
-
-                            #result {
-
-                                text-align: center;
-
-                                font-size: 1.5rem;
-                            }
-                        </style>
-
-                        <div id="reader" class="rounded"></div>
-
-                        <div id="result"></div>
-
-                        <table class="table table-bordered mt-3">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -266,105 +225,72 @@
     @include('backend.sales.modal-customer')
 
     <script>
-        const scanner = new Html5QrcodeScanner('reader', {
-            qrbox: {
-                width: 300,
-                height: 200,
-            },
-            fps: 20,
-        });
-
-        scanner.render(success, error);
-
-        function success(result) {
-            addProductByBarcode(result);
-        }
-
-        function error(err) {
-            console.error(err);
-        }
-
         function formatRupiah(angka) {
             return '' + angka.toLocaleString('id-ID');
         }
 
-        function addProductByBarcode(barcode) {
-            const productElement = document.querySelector(`.select-product[data-barcode="${barcode}"]`);
+        document.getElementById('add-product').addEventListener('click', function() {
+            const modal = new bootstrap.Modal(document.getElementById('productModal'));
+            modal.show();
+        });
 
-            if (productElement) {
-                const id = productElement.dataset.id;
-                const name = productElement.dataset.name;
-                const price = parseFloat(productElement.dataset.price);
-                const stock = parseInt(productElement.dataset.stock);
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('select-product')) {
+                const id = e.target.dataset.id;
+                const name = e.target.dataset.name;
+                const price = parseFloat(e.target.dataset.price);
+                const barcode = e.target.dataset.barcode;
+                const stock = parseInt(e.target.dataset.stock); // Pastikan stock dalam bentuk angka
 
-                addProductToTable(barcode, name, price, stock);
-            } else {
-                alert('Produk tidak ditemukan!');
-            }
-        }
-
-        function addProductToTable(barcode, name, price, stock) {
-            let existingRow = document.querySelector(`.product-barcode[data-barcode="${barcode}"]`);
-
-            if (existingRow) {
-                let qtyInput = existingRow.closest('tr').querySelector('.qty');
-                let newQty = parseInt(qtyInput.value) + 1;
-
-                if (newQty > stock) {
-                    alert('Stok tidak cukup!');
-                    return;
-                }
-
-                qtyInput.value = newQty;
-                qtyInput.dispatchEvent(new Event('input'));
-            } else {
                 const newRow = `
-                    <tr>
-                        <td class="row-number"></td>
-                        <td class="d-none">
-                            <span class="product-barcode" data-barcode="${barcode}">${barcode}</span>
-                        </td>
-                        <td>
-                            <span class="product-name">${name}</span>
-                            <input type="hidden" name="product_name[]" value="${name}">
-                        </td>
-                        <td>
-                            <span class="product-price">${formatRupiah(price)}</span>
-                            <input type="hidden" name="selling_price[]" value="${price}">
-                        </td>
-                        <td>
-                            <input type="number" name="qty[]" class="form-control qty" required
-                                style="width: 100px; display: block; margin: 0 auto;"
-                                min="0" max="${stock}" value="0">
-                        </td>
-                        <td>
-                            <span class="product-stock">${stock}</span>
-                        </td>
-                        <td>
-                            <span class="product-subtotal">0</span>
-                            <input type="hidden" name="sub_total[]" class="subtotal" value="0">
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger remove-row">Remove</button>
-                        </td>
-                    </tr>
-                `;
+            <tr>
+                <td class="row-number"></td>
+                <td class="d-none">
+                    <span class="product-barcode">${barcode}</span>
+                </td>
+                <td>
+                    <span class="product-name">${name}</span>
+                    <input type="hidden" name="product_name[]" value="${name}">
+                </td>
+                <td>
+                    <span class="product-price">${formatRupiah(price)}</span>
+                    <input type="hidden" name="selling_price[]" value="${price}">
+                </td>
+                <td>
+                    <input type="number" name="qty[]" class="form-control qty" required
+                        style="width: 100px; display: block; margin: 0 auto;"
+                        min="1" max="${stock}" value="0">
+                </td>
+                <td>
+                    <span class="product-stock">${stock}</span>
+                </td>
+                <td>
+                    <span class="product-subtotal">0</span>
+                    <input type="hidden" name="sub_total[]" class="subtotal" value="0">
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger remove-row">Remove</button>
+                </td>
+            </tr>
+        `;
 
                 document.getElementById('sales-details-body').insertAdjacentHTML('beforeend', newRow);
                 updateRowNumbers();
+                bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
             }
+        });
 
-            calculateTotal();
-        }
+        // Cegah input qty melebihi stock
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('qty')) {
+                const maxStock = parseInt(e.target.getAttribute('max')); // Ambil stok maksimum
+                let value = parseInt(e.target.value);
 
-        document.body.addEventListener('click', function(e) {
-            if (e.target.classList.contains('select-product')) {
-                const barcode = e.target.dataset.barcode;
-                const name = e.target.dataset.name;
-                const price = parseFloat(e.target.dataset.price);
-                const stock = parseInt(e.target.dataset.stock);
-
-                addProductToTable(barcode, name, price, stock);
+                if (value > maxStock) {
+                    e.target.value = maxStock; // Jika melebihi, set ke max
+                } else if (value < 1 || isNaN(value)) {
+                    e.target.value = 1; // Jika kurang dari 1, set ke minimal
+                }
             }
         });
 
@@ -387,14 +313,7 @@
             if (e.target.classList.contains('qty')) {
                 const row = e.target.closest('tr');
                 const price = parseFloat(row.querySelector('input[name="selling_price[]"]').value) || 0;
-                let qty = e.target.value.trim() === "" ? 0 : parseInt(e.target.value, 10);
-
-                if (isNaN(qty) || qty < 0) {
-                    qty = 0;
-                }
-
-                e.target.value = qty; // Pastikan nilai input tetap 0 jika kosong
-
+                const qty = parseInt(e.target.value) || 0;
                 const subtotal = price * qty;
 
                 row.querySelector('.product-subtotal').textContent = formatRupiah(subtotal);
@@ -403,7 +322,6 @@
                 calculateTotal();
             }
         });
-
 
         function calculateTotal() {
             let total = 0;
@@ -428,6 +346,11 @@
             document.getElementById('cash_return').value = formatRupiah(cashReturn);
         });
 
+        document.querySelector('.btn-success.mb-3').addEventListener('click', function() {
+            const modal = new bootstrap.Modal(document.getElementById('createCustomerModal'));
+            modal.show();
+        });
+
         $(document).ready(function() {
             $('#customer_id').select2({
                 placeholder: "Select Customer",
@@ -435,12 +358,5 @@
                 width: '100%'
             });
         });
-
-        document.getElementById('add-product').addEventListener('click', function() {
-            console.log('Choose Product button clicked'); // Debugging
-            const modal = new bootstrap.Modal(document.getElementById('productModal'));
-            modal.show();
-        });
     </script>
-
 @endsection

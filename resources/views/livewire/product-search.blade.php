@@ -29,6 +29,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $product->product_name }}</td>
                             <td>{!! DNS1D::getBarcodeHTML($product->barcode, 'C128', 1) !!}</td>
+                            {{-- <td>{!! DNS2D::getBarcodeHTML($product->barcode, 'QRCODE', 2,2) !!}</td> --}}
                             <td>{{ $product->category->nama }}</td>
                             <td>{{ $product->stock }}</td>
                             <td>
