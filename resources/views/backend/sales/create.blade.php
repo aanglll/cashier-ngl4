@@ -127,137 +127,133 @@
                 <h1 class="h3 mb-0"><strong>Create</strong> Sales</h1>
                 <a href="{{ route('backend.sales.index') }}" class="btn btn-secondary">Back to List</a>
             </div>
+            <form action="{{ route('backend.sales.store') }}" method="POST">
+                @csrf
+                <div class="row">
+                    <div class="card col-md-4">
+                        <div class="card-body">
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    @foreach ($errors->all() as $error)
+                                        {{ $error }}
+                                    @endforeach
+                                </div>
+                            @endif
 
-            <div class="card">
-                <div class="card-body">
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            @foreach ($errors->all() as $error)
-                                {{ $error }}
-                            @endforeach
-                        </div>
-                    @endif
-                    <form action="{{ route('backend.sales.store') }}" method="POST">
-                        @csrf
 
-                        <div class="row mb-3">
-                            {{-- <div class="col-md-6">
+                            <div class="mb-3">
+                                {{-- <div class="col-md-6">
                                 <h5>No Invoice: {{ $invoiceNumber }}</h5>
                             </div> --}}
-                            <div class="col-md-6">
                                 <h5>Transaction Date: {{ now()->format('d-m-Y') }}</h5>
                             </div>
-                        </div>
 
-                        <hr>
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="customer_id" class="mb-2">Customer</label>
+                            <hr>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label for="customer_id" class="mb-2">Customer</label>
 
-                                <select name="customer_id" id="customer_id" class="form-control" required>
-                                    <option value="">Select Customer</option>
-                                    @foreach ($customers as $customer)
-                                        <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                                    @endforeach
-                                </select>
+                                    <select name="customer_id" id="customer_id" class="form-control" required>
+                                        <option value="">Select Customer</option>
+                                        @foreach ($customers as $customer)
+                                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                        @endforeach
+                                    </select>
 
+                                </div>
                             </div>
-                        </div>
-                        <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal"
-                            data-bs-target="#createCustomerModal">Create Customer</button>
+                            <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal"
+                                data-bs-target="#createCustomerModal">Create Customer</button>
 
-                        <h5>Sales Details</h5>
+                            <h5>Products</h5>
 
-                        {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+                            {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
                             rel="stylesheet"
                             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
                             crossorigin="anonymous"> --}}
 
-                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-                            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-                        </script>
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+                                integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+                            </script>
 
-                        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js"
-                            integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ=="
-                            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js"
+                                integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ=="
+                                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-                        <style>
-                            #reader {
-                                width: 400px;
-
-                                border-radius: 30px;
-                            }
-
-                            @media (max-width: 768px) {
+                            <style>
                                 #reader {
-                                    width: 90%;
-                                    max-width: 300px;
-                                    border-radius: 20px;
+                                    width: 100%;
+
+                                    border-radius: 30px;
                                 }
-                            }
 
-                            #result {
+                                #result {
 
-                                text-align: center;
+                                    text-align: center;
 
-                                font-size: 1.5rem;
-                            }
-                        </style>
+                                    font-size: 1.5rem;
+                                }
+                            </style>
 
-                        <div id="reader" class="rounded"></div>
+                            <div id="reader" class="rounded"></div>
 
-                        <div id="result"></div>
+                            <div id="result"></div>
 
-                        <table class="table table-bordered mt-3">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    {{-- <th>Barcode</th> --}}
-                                    <th>Product</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Stock</th>
-                                    <th>Subtotal</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="sales-details-body"></tbody>
-                        </table>
-                        <button type="button" class="btn btn-success" id="add-product">Choose Product</button>
+                            <button type="button" class="btn btn-success mt-3" id="add-product">Choose Product</button>
 
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="discount">Discount (10%)</label>
-                                <input type="text" name="discount" id="discount" class="form-control" readonly>
+                            <hr>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="discount">Discount 10%</label>
+                                    <input type="text" name="discount" id="discount" class="form-control" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="ppn">PPN 11%</label>
+                                    <input type="text" name="ppn" id="ppn" class="form-control" readonly>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <label for="ppn">PPN (11%)</label>
-                                <input type="text" name="ppn" id="ppn" class="form-control" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="total_price">Total</label>
-                                <input type="text" name="total_price" id="total_price" class="form-control" readonly>
-                            </div>
-                        </div>
 
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <label for="cash_paid">Cash Paid</label>
-                                <input type="number" name="cash_paid" id="cash_paid" class="form-control" required>
+                            <label for="total_price" class="">Total</label>
+                            <input type="text" name="total_price" id="total_price" class="form-control" readonly>
+
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="cash_paid">Cash Paid</label>
+                                    <input type="number" name="cash_paid" id="cash_paid" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="cash_return">Cash Return</label>
+                                    <input type="text" name="cash_return" id="cash_return" class="form-control" readonly>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="cash_return">Cash Return</label>
-                                <input type="text" name="cash_return" id="cash_return" class="form-control" readonly>
+
+                            <div class="mt-3">
+                                <button type="submit" class="btn btn-primary">Save Transaction</button>
                             </div>
                         </div>
-
-                        <div class="mt-3">
-                            <button type="submit" class="btn btn-primary">Save Transaction</button>
+                    </div>
+                    <div class="card col-md-8">
+                        <input type="text" id="barcode-input" class="form-control mt-3"
+                            placeholder="Scan atau masukkan barcode lalu tekan Enter">
+                        <div class="table-responsive">
+                            <table class="table table-bordered mt-3">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Qty</th>
+                                        <th>Stock</th>
+                                        <th>Subtotal</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sales-details-body"></tbody>
+                            </table>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </main>
 
@@ -303,6 +299,29 @@
             }
         }
 
+        document.getElementById('barcode-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                let barcode = this.value.trim();
+
+                if (barcode !== '') {
+                    fetch(`/get-product-by-barcode/${barcode}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                addProductToTable(data.product.barcode, data.product.name, data.product.price,
+                                    data.product.stock);
+                            } else {
+                                alert('Produk tidak ditemukan!');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+
+                    this.value = '';
+                }
+            }
+        });
+
         function addProductToTable(barcode, name, price, stock) {
             let existingRow = document.querySelector(`.product-barcode[data-barcode="${barcode}"]`);
 
@@ -334,7 +353,7 @@
                         </td>
                         <td>
                             <input type="number" name="qty[]" class="form-control qty" required
-                                style="width: 100px; display: block; margin: 0 auto;"
+                                style="width: 70px; display: block; margin: 0 auto;"
                                 min="0" max="${stock}" value="0">
                         </td>
                         <td>

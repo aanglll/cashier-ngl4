@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -32,7 +33,7 @@ class UserController extends Controller
             'phone' => 'required|digits_between:1,15',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -41,6 +42,12 @@ class UserController extends Controller
             'address' => $request->address,
             'phone' => $request->phone,
         ]);
+
+        // Berikan role ke user berdasarkan `user_priv`
+        $role = Role::where('name', $request->user_priv)->first();
+        if ($role) {
+            $user->assignRole($role);
+        }
 
         return redirect()->route('backend.users.index')->with('success', 'User created successfully.');
     }
@@ -78,6 +85,16 @@ class UserController extends Controller
             'phone' => $request->phone,
             'password' => $request->filled('password') ? Hash::make($request->password) : $user->password,
         ]);
+
+        // Update role user
+        if ($user->hasAnyRole(['superadmin', 'admin', 'officer', 'warehouse admin'])) {
+            $user->roles()->detach(); // Hapus role lama
+        }
+
+        $role = Role::where('name', $request->user_priv)->first();
+        if ($role) {
+            $user->assignRole($role);
+        }
 
         return redirect()->back()->with('success', 'User updated successfully.');
     }

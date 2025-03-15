@@ -22,7 +22,7 @@
                             <tr>
                                 <td>{{ $product->barcode }}</td>
                                 <td>{{ $product->product_name }}</td>
-                                <td>Rp{{ number_format($product->purchase_price, 0, ',', '.') }}</td>
+                                <td>{{ number_format($product->purchase_price, 0, ',', '.') }}</td>
                                 <td>{{ $product->stock }}</td>
                                 <td>
                                     <button type="button" class="btn btn-primary select-product"

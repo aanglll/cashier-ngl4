@@ -2,7 +2,7 @@
     <div class="mb-3 d-flex gap-2">
         <input type="text" class="form-control" placeholder="Search Products..." wire:model.live="search">
     
-        <select class="form-control" wire:model.live="category">
+        <select class="form-select" wire:model.live="category">
             <option value="">All Categories</option>
             @foreach ($categories as $category)
                 <option value="{{ $category->id }}">{{ $category->nama }}</option>

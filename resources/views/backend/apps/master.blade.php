@@ -15,6 +15,8 @@
 
     <link rel="canonical" href="https://demo-basic.adminkit.io/" />
 
+    {{-- <title>{{ $settings->site_title }}</title> --}}
+
     <title>Kasirngl</title>
 
     <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">

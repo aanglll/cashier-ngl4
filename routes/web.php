@@ -14,6 +14,8 @@ use App\Http\Controllers\Backend\SaleController;
 use App\Http\Controllers\Backend\SupplierController;
 use App\Http\Controllers\Backend\StockController;
 use App\Http\Controllers\Backend\PurchaseController;
+use App\Http\Controllers\Backend\SettingController;
+use App\Models\Product;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -105,4 +107,25 @@ Route::prefix('dashboard')
         Route::get('/purchases/{id}', [PurchaseController::class, 'show'])->name('backend.purchases.show');
 
         Route::get('/stocks', [StockController::class, 'index'])->name('backend.stocks.index');
+
+        Route::get('/settings', [SettingController::class, 'edit'])->name('settings.edit');
+        Route::post('/settings/update', [SettingController::class, 'update'])->name('settings.update');
     });
+
+Route::get('/get-product-by-barcode/{barcode}', function ($barcode) {
+    $product = Product::where('barcode', $barcode)->first();
+
+    if ($product) {
+        return response()->json([
+            'success' => true,
+            'product' => [
+                'barcode' => $product->barcode,
+                'name' => $product->product_name,
+                'price' => number_format($product->selling_price, 0, '.', ''),
+                'stock' => $product->stock,
+            ],
+        ]);
+    } else {
+        return response()->json(['success' => false]);
+    }
+});

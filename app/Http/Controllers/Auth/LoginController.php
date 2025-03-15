@@ -9,25 +9,27 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
+     * Determine where to redirect users after login.
      *
-     * @var string
+     * @return string
      */
-    protected $redirectTo = '/login';
+    protected function redirectTo()
+    {
+        $user = Auth::user();
+
+        if ($user->hasRole('superadmin') || $user->hasRole('admin')) {
+            return '/dashboard';
+        } elseif ($user->hasRole('officer')) {
+            return '/dashboard/sales/create';
+        } elseif ($user->hasRole('warehouse admin')) {
+            return '/dashboard/purchases/create';
+        }
+
+        return '/dashboard'; // Default redirect jika tidak ada role yang cocok
+    }
 
     /**
      * Create a new controller instance.

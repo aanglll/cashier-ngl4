@@ -12,6 +12,7 @@ use App\Models\Sale;
 use App\Models\Purchase;
 use App\Models\Supplier;
 use Carbon\Carbon;
+use App\Models\Setting;
 
 class HomeController extends Controller
 {
@@ -79,13 +80,15 @@ class HomeController extends Controller
         $totalCustomers = Customer::count();
         $totalUsers = User::count() - 1;
         $totalSuppliers = Supplier::count();
+        $settings = Setting::first();
 
-        return view('backend.home', compact('totalProducts', 'totalCustomers', 'totalUsers', 'totalSales', 'totalPurchases', 'totalNet', 'totalSaleTransaction', 'totalSuppliers'));
+        return view('backend.home', compact('totalProducts', 'totalCustomers', 'totalUsers', 'totalSales', 'totalPurchases', 'totalNet', 'totalSaleTransaction', 'totalSuppliers', 'settings'));
     }
 
     public function product()
     {
-        return view('backend.product.index');
+        $settings = Setting::first();
+        return view('backend.product.index', compact('settings'));
     }
 
     public function profile($id)
@@ -95,6 +98,7 @@ class HomeController extends Controller
         }
 
         $user = User::findOrFail($id);
-        return view('backend.profile.index', compact('user'));
+        $settings = Setting::first();
+        return view('backend.profile.index', compact('user', 'settings'));
     }
 }

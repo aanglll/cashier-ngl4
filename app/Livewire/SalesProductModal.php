@@ -7,7 +7,7 @@ use Livewire\WithPagination;
 use App\Models\Product;
 use App\Models\ProductCategory;
 
-class ProductSearch extends Component
+class SalesProductModal extends Component
 {
     use WithPagination;
 
@@ -28,12 +28,12 @@ class ProductSearch extends Component
     {
         $query = Product::with('category');
 
-        // Filter Kategori terlebih dahulu
+        // Filter berdasarkan kategori terlebih dahulu
         if ($this->category) {
             $query->where('id_category', $this->category);
         }
 
-        // Setelah filter kategori, baru tambahkan pencarian
+        // Setelah filter kategori, tambahkan pencarian berdasarkan nama produk atau barcode
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('product_name', 'like', '%' . $this->search . '%')
@@ -44,6 +44,6 @@ class ProductSearch extends Component
         $products = $query->paginate(10);
         $categories = ProductCategory::all();
 
-        return view('livewire.product-search', compact('products', 'categories'));
+        return view('livewire.sales-product-modal', compact('products', 'categories'));
     }
 }
