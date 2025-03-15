@@ -10,9 +10,9 @@
                     <a href="javascript:void(0);" class="btn btn-secondary" onclick="printReceipt()">
                         Print <i data-feather="printer"></i>
                     </a>
-                    {{-- <a href="javascript:void(0);" class="btn btn-secondary" onclick="exportPDF()">
+                    <a href="{{ route('backend.sales.exportPDF') }}" class="btn btn-secondary">
                         Export to PDF <i data-feather="book"></i>
-                    </a> --}}
+                    </a>
                     <a href="{{ route('backend.sales.create') }}" class="btn btn-primary">
                         Create <i data-feather="plus"></i>
                     </a>

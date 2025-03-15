@@ -112,6 +112,8 @@ Route::prefix('dashboard')
         Route::post('/settings/update', [SettingController::class, 'update'])->name('settings.update');
     });
 
+Route::get('/sales/export-pdf', [SaleController::class, 'exportPDF'])->name('backend.sales.exportPDF');
+
 Route::get('/get-product-by-barcode/{barcode}', function ($barcode) {
     $product = Product::where('barcode', $barcode)->first();
 

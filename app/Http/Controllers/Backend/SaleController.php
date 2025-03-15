@@ -13,6 +13,7 @@ use App\Models\ProductUnit;
 use App\Models\Setting;
 use App\Models\Stock;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 class SaleController extends Controller
@@ -208,5 +209,13 @@ class SaleController extends Controller
         $settings = Setting::first();
 
         return view('backend.sales.show', compact('sale', 'settings'));
+    }
+
+    public function exportPDF(Request $request)
+    {
+        $sales = Sale::all();
+
+        $pdf = Pdf::loadView('backend.sales.pdf', compact('sales'));
+        return $pdf->download('sales_report.pdf');
     }
 }
