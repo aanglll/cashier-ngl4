@@ -5,19 +5,21 @@ namespace App\Http\Controllers\Backend;
 use App\Models\ProductUnit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 
 class ProductUnitController extends Controller
 {
     public function index()
     {
         $productUnits = ProductUnit::latest()->paginate(10);
-
-        return view('backend.product.units.index', compact('productUnits'));
+        $settings = Setting::first();
+        return view('backend.product.units.index', compact('productUnits', 'settings'));
     }
 
     public function create()
     {
-        return view('backend.product.units.create');
+        $settings = Setting::first();
+        return view('backend.product.units.create', compact('settings'));
     }
 
     public function store(Request $request)
@@ -34,8 +36,9 @@ class ProductUnitController extends Controller
 
     public function edit($id)
     {
+        $settings = Setting::first();
         $productUnit = ProductUnit::findOrFail($id);
-        return view('backend.product.units.edit', compact('productUnit'));
+        return view('backend.product.units.edit', compact('productUnit', 'settings'));
     }
 
     public function update(Request $request, $id)

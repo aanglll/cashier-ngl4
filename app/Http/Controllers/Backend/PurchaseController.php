@@ -10,6 +10,7 @@ use App\Models\Supplier;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductUnit;
+use App\Models\Setting;
 use App\Models\Stock;
 
 class PurchaseController extends Controller
@@ -25,8 +26,9 @@ class PurchaseController extends Controller
             ->paginate(10);
         $categories = ProductCategory::where('status', 'active')->get();
         $productUnits = ProductUnit::where('status', 'active')->get();
+        $settings = Setting::first();
 
-        return view('backend.purchases.index', compact('purchases', 'suppliers', 'products', 'categories', 'productUnits'));
+        return view('backend.purchases.index', compact('purchases', 'suppliers', 'products', 'categories', 'productUnits', 'settings'));
     }
 
     public function create()
@@ -40,8 +42,9 @@ class PurchaseController extends Controller
             ->paginate(10);
         $categories = ProductCategory::where('status', 'active')->get();
         $productUnits = ProductUnit::where('status', 'active')->get();
+        $settings = Setting::first();
 
-        return view('backend.purchases.create', compact('suppliers', 'invoiceNumber', 'products', 'categories', 'productUnits'));
+        return view('backend.purchases.create', compact('suppliers', 'invoiceNumber', 'products', 'categories', 'productUnits', 'settings'));
     }
 
     public function store(Request $request)
@@ -121,6 +124,7 @@ class PurchaseController extends Controller
     public function show($id)
     {
         $purchase = Purchase::with(['user', 'supplier', 'purchaseDetails.product'])->findOrFail($id);
-        return view('backend.purchases.show', compact('purchase'));
+        $settings = Setting::first();
+        return view('backend.purchases.show', compact('purchase', 'settings'));
     }
 }

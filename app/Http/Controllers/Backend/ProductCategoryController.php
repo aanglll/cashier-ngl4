@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProductCategory;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class ProductCategoryController extends Controller
@@ -11,13 +12,14 @@ class ProductCategoryController extends Controller
     public function index()
     {
         $categories = ProductCategory::latest()->paginate(10);
-
-        return view('backend.product.categories.index', compact('categories'));
+        $settings = Setting::first();
+        return view('backend.product.categories.index', compact('categories', 'settings'));
     }
 
     public function create()
     {
-        return view('backend.product.categories.create');
+        $settings = Setting::first();
+        return view('backend.product.categories.create', compact('settings'));
     }
     public function store(Request $request)
     {
@@ -36,8 +38,9 @@ class ProductCategoryController extends Controller
 
     public function edit($id)
     {
+        $settings = Setting::first();
         $category = ProductCategory::findOrFail($id);
-        return view('backend.product.categories.edit', compact('category'));
+        return view('backend.product.categories.edit', compact('category', 'settings'));
     }
 
     public function update(Request $request, $id)

@@ -1,7 +1,7 @@
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="{{ route('home') }}">
-            <span class="align-middle">Kasirngl</span>
+            <span class="align-middle">{!! $settings->site_name !!}</span>
         </a>
 
         <ul class="sidebar-nav">

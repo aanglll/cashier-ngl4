@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductUnit;
+use App\Models\Setting;
 use App\Models\Stock;
 use App\Models\User;
 use Carbon\Carbon;
@@ -79,8 +80,9 @@ class SaleController extends Controller
             ->paginate(10);
         $categories = ProductCategory::where('status', 'active')->get();
         $productUnits = ProductUnit::where('status', 'active')->get();
+        $settings = Setting::first();
 
-        return view('backend.sales.index', compact('sales', 'customers', 'products', 'categories', 'productUnits', 'filter', 'startDate', 'endDate'));
+        return view('backend.sales.index', compact('sales', 'customers', 'products', 'categories', 'productUnits', 'filter', 'startDate', 'endDate', 'settings'));
     }
 
     public function create()
@@ -102,7 +104,9 @@ class SaleController extends Controller
             ->paginate(10);
         $categories = ProductCategory::where('status', 'active')->get();
         $productUnits = ProductUnit::where('status', 'active')->get();
-        return view('backend.sales.create', compact('customers', 'invoiceNumber', 'products', 'categories', 'productUnits'));
+        $settings = Setting::first();
+
+        return view('backend.sales.create', compact('customers', 'invoiceNumber', 'products', 'categories', 'productUnits', 'settings'));
     }
 
     public function store(Request $request)
@@ -201,7 +205,8 @@ class SaleController extends Controller
     {
         // Mencari penjualan berdasarkan ID dan memuat detail yang terkait
         $sale = Sale::with(['user', 'customer', 'salesDetails.product'])->findOrFail($id);
+        $settings = Setting::first();
 
-        return view('backend.sales.show', compact('sale'));
+        return view('backend.sales.show', compact('sale', 'settings'));
     }
 }

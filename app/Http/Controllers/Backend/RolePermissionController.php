@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -12,8 +13,8 @@ class RolePermissionController extends Controller
     public function index()
     {
         $roles = Role::where('id', '!=', 1)->latest()->paginate(10);
-
-        return view('backend.role-permission.index', compact('roles'));
+        $settings = Setting::first();
+        return view('backend.role-permission.index', compact('roles', 'settings'));
     }
 
     public function create()
@@ -21,7 +22,7 @@ class RolePermissionController extends Controller
         $permissions = Permission::all();
         $role = new Role();
 
-        return view('backend.role-permission.create', compact('permissions', 'role'));
+        return view('backend.role-permission.create', compact('permissions', 'role', 'settings'));
     }
 
     public function store(Request $request)
@@ -44,16 +45,15 @@ class RolePermissionController extends Controller
         return redirect()->route('role-permission.index')->with('success', 'Role created successfully.');
     }
 
-    // Edit existing role
     public function edit($id)
     {
         $role = Role::findOrFail($id);
         $permissions = Permission::all();
+        $settings = Setting::first();
 
-        return view('backend.role-permission.edit', compact('role', 'permissions'));
+        return view('backend.role-permission.edit', compact('role', 'permissions', 'settings'));
     }
 
-    // Update the role
     public function update(Request $request, $id)
     {
         $role = Role::findOrFail($id);
@@ -86,7 +86,6 @@ class RolePermissionController extends Controller
         // Hapus semua permissions terkait terlebih dahulu (jika diperlukan)
         $role->permissions()->detach();
 
-        // Hapus role
         $role->delete();
 
         return redirect()->route('role-permission.index')->with('success', 'Role deleted successfully.');

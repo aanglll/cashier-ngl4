@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -11,12 +12,14 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::latest()->paginate(10);
-        return view('backend.customer.index', compact('customers'));
+        $settings = Setting::first();
+        return view('backend.customer.index', compact('customers', 'settings'));
     }
 
     public function create()
     {
-        return view('backend.customer.create');
+        $settings = Setting::first();
+        return view('backend.customer.create', compact('settings'));
     }
 
     public function store(Request $request)
@@ -39,7 +42,8 @@ class CustomerController extends Controller
     public function edit($id)
     {
         $customer = Customer::findOrFail($id);
-        return view('backend.customer.edit', compact('customer'));
+        $settings = Setting::first();
+        return view('backend.customer.edit', compact('customer', 'settings'));
     }
 
     public function update(Request $request, $id)

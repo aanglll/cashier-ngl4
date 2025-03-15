@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -13,12 +14,14 @@ class UserController extends Controller
     public function index()
     {
         $users = User::where('id', '!=', 1)->latest()->paginate(10);
-        return view('backend.user.index', compact('users'));
+        $settings = Setting::first();
+        return view('backend.user.index', compact('users', 'settings'));
     }
 
     public function create()
     {
-        return view('backend.user.create');
+        $settings = Setting::first();
+        return view('backend.user.create', compact('settings'));
     }
 
     public function store(Request $request)
@@ -59,7 +62,8 @@ class UserController extends Controller
         }
 
         $user = User::findOrFail($id);
-        return view('backend.user.edit', compact('user'));
+        $settings = Setting::first();
+        return view('backend.user.edit', compact('user', 'settings'));
     }
 
     public function update(Request $request, $id)

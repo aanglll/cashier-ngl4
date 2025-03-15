@@ -11,8 +11,8 @@ class SettingController extends Controller
 {
     public function edit()
     {
-        $setting = Setting::first();
-        return view('backend.setting.edit', compact('setting'));
+        $settings = Setting::first();
+        return view('backend.setting.edit', compact('settings'));
     }
 
     public function update(Request $request)

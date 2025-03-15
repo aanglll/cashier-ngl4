@@ -15,9 +15,10 @@
                     <div class="card">
                         <div class="card-body m-sm-3 m-md-5">
                             <div class="mb-4">
-                                <strong>Kasirngl</strong>,
-                                <br />
-                                We appreciate your visit! Here is your receipt for today's purchase. Have a great day!
+                                <img src="{{ asset('storage/' . $settings->site_logo) }}" alt="{{ $settings->site_name }}"
+                                    width="50">
+                                <strong>{!! $settings->site_name !!}</strong>,
+                                {!! $settings->receipt_header !!}
                             </div>
 
                             <div class="row">
@@ -46,72 +47,74 @@
                             </div>
 
 
-                            <hr class="my-4" />
-
-                            <table class="table table-sm">
-                                <thead>
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th class="text-end">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($sale->salesDetails as $index => $detail)
+                            <hr class="my-4"/>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
                                         <tr>
-                                            <td>{{ $detail->product->product_name }}</td>
-                                            <td>{{ number_format($detail->selling_price, 0, ',', '.') }}</td>
-                                            <td>{{ $detail->qty }}</td>
-                                            <td class="text-end">{{ number_format($detail->sub_total, 0, ',', '.') }}</td>
+                                            <th>Product</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th class="text-end">Total</th>
                                         </tr>
-                                    @endforeach
-                                    {{-- <tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($sale->salesDetails as $index => $detail)
+                                            <tr>
+                                                <td>{{ $detail->product->product_name }}</td>
+                                                <td>{{ number_format($detail->selling_price, 0, ',', '.') }}</td>
+                                                <td>{{ $detail->qty }}</td>
+                                                <td class="text-end">{{ number_format($detail->sub_total, 0, ',', '.') }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        {{-- <tr>
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>
                                         <th>Subtotal </th>
                                         <th class="text-end">2.920.000</th>
                                     </tr> --}}
-                                    <tr>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>Discount </th>
-                                        <th class="text-end">10%
-                                            {{-- {{ number_format($sale->discount, 0, ',', '.') }} --}}
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>PPN </th>
-                                        <th class="text-end">11%
-                                            {{-- {{ number_format($sale->ppn, 0, ',', '.') }} --}}
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>Total </th>
-                                        <th class="text-end">{{ number_format($sale->total_price, 0, ',', '.') }}</th>
-                                    </tr>
-                                    <tr>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>Cash Paid </th>
-                                        <th class="text-end">{{ number_format($sale->cash_paid, 0, ',', '.') }}</th>
-                                    </tr>
-                                    <tr>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>Cash Return </th>
-                                        <th class="text-end">{{ number_format($sale->cash_return, 0, ',', '.') }}</th>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        <tr>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>Discount </th>
+                                            <th class="text-end">10%
+                                                {{-- {{ number_format($sale->discount, 0, ',', '.') }} --}}
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>PPN </th>
+                                            <th class="text-end">11%
+                                                {{-- {{ number_format($sale->ppn, 0, ',', '.') }} --}}
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>Total </th>
+                                            <th class="text-end">{{ number_format($sale->total_price, 0, ',', '.') }}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>Cash Paid </th>
+                                            <th class="text-end">{{ number_format($sale->cash_paid, 0, ',', '.') }}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>Cash Return </th>
+                                            <th class="text-end">{{ number_format($sale->cash_return, 0, ',', '.') }}</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
                             <div class="text-center">
                                 <p class="text-sm">
-                                    Thank you for shopping with us! We look forward to serving you again.
+                                    {!! $settings->receipt_footer !!}
                                 </p>
 
                             </div>

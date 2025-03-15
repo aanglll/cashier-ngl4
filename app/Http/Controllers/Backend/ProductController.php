@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\ProductCategory;
 use App\Models\ProductUnit;
+use App\Models\Setting;
 
 class ProductController extends Controller
 {
@@ -21,15 +22,17 @@ class ProductController extends Controller
             ->paginate(10);
         $categories = ProductCategory::where('status', 'active')->get();
         $productUnits = ProductUnit::where('status', 'active')->get();
+        $settings = Setting::first();
 
-        return view('backend.product.posts.index', compact('products', 'categories', 'productUnits'));
+        return view('backend.product.posts.index', compact('products', 'categories', 'productUnits', 'settings'));
     }
 
     public function create()
     {
         $productUnits = ProductUnit::where('status', 'active')->get();
         $categories = ProductCategory::where('status', 'active')->get();
-        return view('backend.product.posts.create', compact('categories', 'productUnits'));
+        $settings = Setting::first();
+        return view('backend.product.posts.create', compact('categories', 'productUnits', 'settings'));
     }
 
     public function store(Request $request)
@@ -64,8 +67,9 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $categories = ProductCategory::where('status', 'active')->get();
         $productUnits = ProductUnit::where('status', 'active')->get();
+        $settings = Setting::first();
 
-        return view('backend.product.posts.edit', compact('product', 'categories', 'productUnits'));
+        return view('backend.product.posts.edit', compact('product', 'categories', 'productUnits', 'settings'));
     }
 
     public function update(Request $request, $id)

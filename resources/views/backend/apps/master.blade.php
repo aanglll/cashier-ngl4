@@ -5,19 +5,17 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
-    <meta name="author" content="AdminKit">
+    <meta name="description" content="{{ $settings->site_title }}">
+    <meta name="author" content="{{ $settings->site_title }}">
     <meta name="keywords"
-        content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+        content="{{ $settings->site_title }}">
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="shortcut icon" href="{{ asset('assets/img/icons/favicon.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('storage/' . $settings->favicon) }}" />
 
-    <link rel="canonical" href="https://demo-basic.adminkit.io/" />
+    {{-- <link rel="canonical" href="https://demo-basic.adminkit.io/" /> --}}
 
-    {{-- <title>{{ $settings->site_title }}</title> --}}
-
-    <title>Kasirngl</title>
+    <title>{{ $settings->site_title }}</title>
 
     <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
