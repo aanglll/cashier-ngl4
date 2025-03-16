@@ -15,4 +15,12 @@ class StockController extends Controller
         $settings = Setting::first();
         return view('backend.stocks.index', compact('stocks', 'settings'));
     }
+
+    public function destroy($id)
+    {
+        $stock = Stock::findOrFail($id);
+        $stock->delete();
+
+        return redirect()->route('backend.stocks.index')->with('success', 'Stock deleted successfully.');
+    }
 }

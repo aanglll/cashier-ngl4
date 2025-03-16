@@ -21,8 +21,9 @@
                             <th>Stock In</th>
                             <th>Stock Out</th>
                             <th>Current Stock</th>
-                            <th>Source</th>
+                            {{-- <th>Source</th> --}}
                             <th>Updated At</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,8 +38,19 @@
                                         {{ $stock->current_stock }}
                                     </span>
                                 </td>
-                                <td>{{ ucfirst($stock->source) }}</td>
+                                {{-- <td>{{ ucfirst($stock->source) }}</td> --}}
                                 <td>{{ $stock->updated_at->format('Y-m-d H:i') }}</td>
+                                <td>
+                                    <form action="{{ route('backend.stocks.destroy', $stock->id) }}" method="POST"
+                                        style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Are you sure you want to delete this stock?')">
+                                            <i data-feather="trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

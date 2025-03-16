@@ -107,6 +107,7 @@ Route::prefix('dashboard')
         Route::get('/purchases/{id}', [PurchaseController::class, 'show'])->name('backend.purchases.show');
 
         Route::get('/stocks', [StockController::class, 'index'])->name('backend.stocks.index');
+        Route::delete('/stocks/{id}', [StockController::class, 'destroy'])->name('backend.stocks.destroy');
 
         Route::get('/settings', [SettingController::class, 'edit'])->name('settings.edit');
         Route::post('/settings/update', [SettingController::class, 'update'])->name('settings.update');
