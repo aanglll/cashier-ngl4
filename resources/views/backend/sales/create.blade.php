@@ -152,16 +152,15 @@
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <label for="customer_id" class="mb-2">Customer</label>
-
-                                    <select name="customer_id" id="customer_id" class="form-control" required>
+                                    <select name="customer_id" id="customer_id" class="form-control">
                                         <option value="">Select Customer</option>
                                         @foreach ($customers as $customer)
                                             <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                                         @endforeach
                                     </select>
-
                                 </div>
                             </div>
+
                             <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal"
                                 data-bs-target="#createCustomerModal">Create Customer</button>
 
@@ -204,11 +203,11 @@
                             <hr>
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label for="discount">Discount 10%</label>
+                                    <label for="discount">Discount</label>
                                     <input type="text" name="discount" id="discount" class="form-control" readonly>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="ppn">PPN 11%</label>
+                                    <label for="ppn">PPN</label>
                                     <input type="text" name="ppn" id="ppn" class="form-control" readonly>
                                 </div>
                             </div>
@@ -234,7 +233,7 @@
                     </div>
                     <div class="card col-md-8">
                         <input type="text" id="barcode-input" class="form-control mt-3"
-                            placeholder="Scan atau masukkan barcode lalu tekan Enter">
+                            placeholder="Scan or enter the barcode and then press Enter">
                         <div class="table-responsive">
                             <table class="table table-bordered mt-3">
                                 <thead>
@@ -424,20 +423,37 @@
         });
 
 
-        function calculateTotal() {
-            let total = 0;
-            document.querySelectorAll('.subtotal').forEach(input => {
-                total += parseFloat(input.value) || 0;
-            });
+        // function calculateTotal() {
+        //     let total = 0;
+        //     document.querySelectorAll('.subtotal').forEach(input => {
+        //         total += parseFloat(input.value) || 0;
+        //     });
 
-            const discount = total * 0.1;
-            const ppn = (total - discount) * 0.11;
-            const grandTotal = total - discount + ppn;
+        //     const discount = total * 0.1;
+        //     const ppn = (total - discount) * 0.11;
+        //     const grandTotal = total - discount + ppn;
 
-            document.getElementById('discount').value = formatRupiah(discount);
-            document.getElementById('ppn').value = formatRupiah(ppn);
-            document.getElementById('total_price').value = formatRupiah(grandTotal);
-        }
+        //     document.getElementById('discount').value = formatRupiah(discount);
+        //     document.getElementById('ppn').value = formatRupiah(ppn);
+        //     document.getElementById('total_price').value = formatRupiah(grandTotal);
+        // }
+        document.getElementById('customer_id').addEventListener('change', calculateTotal);
+
+    function calculateTotal() {
+        let total = 0;
+        document.querySelectorAll('.subtotal').forEach(input => {
+            total += parseFloat(input.value) || 0;
+        });
+
+        const hasCustomer = document.getElementById('customer_id').value !== "";
+        const discount = hasCustomer ? total * 0.1 : 0;
+        const ppn = (total - discount) * 0.11;
+        const grandTotal = total - discount + ppn;
+
+        document.getElementById('discount').value = formatRupiah(discount);
+        document.getElementById('ppn').value = formatRupiah(ppn);
+        document.getElementById('total_price').value = formatRupiah(grandTotal);
+    }
 
         document.getElementById('cash_paid').addEventListener('input', function() {
             const cashPaid = parseFloat(this.value) || 0;

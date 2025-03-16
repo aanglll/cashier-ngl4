@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.6",
         "livewire/livewire": "^3.6",
+        "maatwebsite/excel": "^3.1",
         "milon/barcode": "^12.0",
         "spatie/laravel-permission": "^6.10"
     },

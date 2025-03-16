@@ -33,7 +33,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-6 col-md-6">
-                                    @if ($sale->customer->name)
+                                    @if ($sale->customer)
                                         <div class="text-muted">Customer</div>
                                         <div class="fw-bold">{{ $sale->customer->name }}</div>
                                     @endif
@@ -78,16 +78,16 @@
                                             <th>&nbsp;</th>
                                             <th>&nbsp;</th>
                                             <th>Discount </th>
-                                            <th class="text-end">10%
-                                                {{-- {{ number_format($sale->discount, 0, ',', '.') }} --}}
+                                            <th class="text-end">
+                                                {{ number_format($sale->discount, 0, ',', '.') }}
                                             </th>
                                         </tr>
                                         <tr>
                                             <th>&nbsp;</th>
                                             <th>&nbsp;</th>
-                                            <th>PPN </th>
-                                            <th class="text-end">11%
-                                                {{-- {{ number_format($sale->ppn, 0, ',', '.') }} --}}
+                                            <th>PPN</th>
+                                            <th class="text-end">
+                                                {{ number_format($sale->ppn, 0, ',', '.') }}
                                             </th>
                                         </tr>
                                         <tr>

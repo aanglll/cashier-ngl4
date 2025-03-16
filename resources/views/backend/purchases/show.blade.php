@@ -79,16 +79,16 @@
                                             <th>&nbsp;</th>
                                             <th>&nbsp;</th>
                                             <th>Discount </th>
-                                            <th class="text-end">10%
-                                                {{-- {{ number_format($purchase->discount, 0, ',', '.') }} --}}
+                                            <th class="text-end">
+                                                {{ number_format($purchase->discount, 0, ',', '.') }}
                                             </th>
                                         </tr>
                                         <tr>
                                             <th>&nbsp;</th>
                                             <th>&nbsp;</th>
                                             <th>PPN </th>
-                                            <th class="text-end">11%
-                                                {{-- {{ number_format($purchase->ppn, 0, ',', '.') }} --}}
+                                            <th class="text-end">
+                                                {{ number_format($purchase->ppn, 0, ',', '.') }}
                                             </th>
                                         </tr>
                                         <tr>

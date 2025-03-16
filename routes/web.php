@@ -113,6 +113,7 @@ Route::prefix('dashboard')
     });
 
 Route::get('/sales/export-pdf', [SaleController::class, 'exportPDF'])->name('backend.sales.exportPDF');
+Route::get('backend/sales/export-excel', [SaleController::class, 'exportExcel'])->name('backend.sales.export-excel');
 
 Route::get('/get-product-by-barcode/{barcode}', function ($barcode) {
     $product = Product::where('barcode', $barcode)->first();

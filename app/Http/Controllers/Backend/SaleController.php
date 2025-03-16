@@ -15,6 +15,8 @@ use App\Models\Stock;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use App\Exports\SalesExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SaleController extends Controller
 {
@@ -120,7 +122,7 @@ class SaleController extends Controller
         ]);
 
         $validated = $request->validate([
-            'customer_id' => 'required|exists:customers,id',
+            'customer_id' => 'nullable|exists:customers,id',
             'discount' => 'nullable|numeric',
             'ppn' => 'nullable|numeric',
             'total_price' => 'required|numeric',
@@ -217,5 +219,10 @@ class SaleController extends Controller
 
         $pdf = Pdf::loadView('backend.sales.pdf', compact('sales'));
         return $pdf->download('sales_report.pdf');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new SalesExport(), 'sales.xlsx');
     }
 }

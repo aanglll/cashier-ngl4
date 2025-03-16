@@ -7,6 +7,11 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1 class="h3 mb-0"><strong>Sale</strong> Management</h1>
                 <div>
+                    <a
+                    href="{{ route('backend.sales.export-excel') }}"
+                    class="btn btn-secondary">
+                        Export to Excel <i data-feather="file-plus"></i>
+                    </a>
                     <a href="javascript:void(0);" class="btn btn-secondary" onclick="printReceipt()">
                         Print <i data-feather="printer"></i>
                     </a>

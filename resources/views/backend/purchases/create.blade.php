@@ -127,91 +127,94 @@
                 <h1 class="h3 mb-0"><strong>Create</strong> Purchase</h1>
                 <a href="{{ route('backend.purchases.index') }}" class="btn btn-secondary">Back to List</a>
             </div>
+            <form action="{{ route('backend.purchases.store') }}" method="POST">
+                @csrf
+                <div class="row">
+                    <div class="card col-md-4">
+                        <div class="card-body">
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    @foreach ($errors->all() as $error)
+                                        {{ $error }}
+                                    @endforeach
+                                </div>
+                            @endif
 
-            <div class="card">
-                <div class="card-body">
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            @foreach ($errors->all() as $error)
-                                {{ $error }}
-                            @endforeach
-                        </div>
-                    @endif
-                    <form action="{{ route('backend.purchases.store') }}" method="POST">
-                        @csrf
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
+                            <div class="row mb-3">
                                 <h5>Transaction Date: {{ now()->format('d-m-Y') }}</h5>
                             </div>
-                        </div>
 
-                        <hr>
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="supplier_id" class="mb-2">Supplier</label>
-                                <select name="supplier_id" id="supplier_id" class="form-control" required>
-                                    <option value="">Select Supplier</option>
-                                    @foreach ($suppliers as $supplier)
-                                        <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
-                                    @endforeach
-                                </select>
+                            <hr>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label for="supplier_id" class="mb-2">Supplier</label>
+                                    <select name="supplier_id" id="supplier_id" class="form-control" required>
+                                        <option value="">Select Supplier</option>
+                                        @foreach ($suppliers as $supplier)
+                                            <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal"
-                            data-bs-target="#createSupplierModal">Create Supplier</button>
+                            <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal"
+                                data-bs-target="#createSupplierModal">Create Supplier</button>
 
-                        <h5>Purchase Details</h5>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Barcode</th>
-                                    <th>Product</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Stock</th>
-                                    <th>Subtotal</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="purchase-details-body"></tbody>
-                        </table>
-                        <button type="button" class="btn btn-success" id="add-product">Choose Product</button>
+                            <h5>Products</h5>
 
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="discount">Discount (10%)</label>
-                                <input type="text" name="discount" id="discount" class="form-control" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="ppn">PPN (11%)</label>
-                                <input type="text" name="ppn" id="ppn" class="form-control" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="total_price">Total</label>
-                                <input type="text" name="total_price" id="total_price" class="form-control" readonly>
-                            </div>
-                        </div>
+                            <button type="button" class="btn btn-success" id="add-product">Choose Product</button>
 
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <label for="cash_paid">Cash Paid</label>
-                                <input type="number" name="cash_paid" id="cash_paid" class="form-control" required>
+                            <hr>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="discount">Discount</label>
+                                    <input type="text" name="discount" id="discount" class="form-control" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="ppn">PPN</label>
+                                    <input type="text" name="ppn" id="ppn" class="form-control" readonly>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="cash_return">Cash Return</label>
-                                <input type="text" name="cash_return" id="cash_return" class="form-control" readonly>
+
+                            <label for="total_price">Total</label>
+                            <input type="text" name="total_price" id="total_price" class="form-control" readonly>
+
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="cash_paid">Cash Paid</label>
+                                    <input type="number" name="cash_paid" id="cash_paid" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="cash_return">Cash Return</label>
+                                    <input type="text" name="cash_return" id="cash_return" class="form-control" readonly>
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <button type="submit" class="btn btn-primary">Save Transaction</button>
                             </div>
                         </div>
-
-                        <div class="mt-3">
-                            <button type="submit" class="btn btn-primary">Save Transaction</button>
+                    </div>
+                    <div class="card col-md-8">
+                        <div class="table-responsive">
+                            <table class="table table-bordered mt-3">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Qty</th>
+                                        <th>Stock</th>
+                                        <th>Subtotal</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="purchase-details-body"></tbody>
+                            </table>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </main>
 
@@ -241,9 +244,6 @@
                     <tr>
                         <td class="row-number"></td>
                         <td>
-                            <span class="product-barcode">${barcode}</span>
-                        </td>
-                        <td>
                             <span class="product-name">${name}</span>
                             <input type="hidden" name="product_name[]" value="${name}">
                         </td>
@@ -252,7 +252,7 @@
                             <input type="hidden" name="purchase_price[]" value="${price}">
                         </td>
                         <td>
-                            <input type="number" name="qty[]" class="form-control qty" required style="width: 100px; display: block; margin: 0 auto;" min="1">
+                            <input type="number" name="qty[]" class="form-control qty" required style="width: 70px; display: block; margin: 0 auto;" min="1">
                         </td>
                         <td>
                             <span class="product-stock">${stock}</span>
