@@ -6,7 +6,12 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1 class="h3 mb-0"><strong>Invoice</h1>
                 <a href="javascript:void(0);" class="btn btn-primary" onclick="printReceipt()">Print this receipt</a>
-                <a href="{{ route('backend.purchases.index') }}" class="btn btn-secondary">Back to List</a>
+                @if (auth()->user()->can('create purchases'))
+                    <a href="{{ route('backend.purchases.create') }}" class="btn btn-secondary">Create new Purchase</a>
+                @endif
+                @if (auth()->user()->can('view purchases'))
+                    <a href="{{ route('backend.purchases.index') }}" class="btn btn-secondary">Back to List</a>
+                @endif
             </div>
 
             <div class="row">
@@ -34,7 +39,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-6 col-md-6">
-                                    @if ($purchase->supplier->name)
+                                    @if ($purchase->supplier)
                                         <div class="text-muted">Supplier</div>
                                         <div class="fw-bold">{{ $purchase->supplier->name }}</div>
                                     @endif

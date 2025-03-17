@@ -13,9 +13,20 @@
                 </li>
             @endif
 
-            {{-- <li class="sidebar-header">
-                Transaction
-            </li> --}}
+            @php
+                $showTransactionHeader =
+                    auth()->user()->can('view sales') ||
+                    auth()->user()->hasRole('officer') ||
+                    auth()->user()->can('view purchases') ||
+                    auth()->user()->hasRole('warehouse admin') ||
+                    auth()->user()->can('view stocks');
+            @endphp
+
+            @if ($showTransactionHeader)
+                <li class="sidebar-header">
+                    Transaction
+                </li>
+            @endif
 
             @if (auth()->user()->can('view sales'))
                 <li class="sidebar-item {{ request()->is('dashboard/sales*') ? 'active' : '' }}">
@@ -41,6 +52,14 @@
                 </li>
             @endif
 
+            @if (auth()->user()->hasRole('warehouse admin'))
+                <li class="sidebar-item {{ request()->is('dashboard/purchases*') ? 'active' : '' }}">
+                    <a class="sidebar-link" href="{{ route('backend.purchases.create') }}">
+                        <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Purchase</span>
+                    </a>
+                </li>
+            @endif
+
             @if (auth()->user()->can('view stocks'))
                 <li class="sidebar-item {{ request()->is('dashboard/stock*') ? 'active' : '' }}">
                     <a class="sidebar-link" href="{{ route('backend.stocks.index') }}">
@@ -59,9 +78,21 @@
                 </a>
             </li> --}}
 
-            {{-- <li class="sidebar-header">
-                Master Data
-            </li> --}}
+            @php
+                $showMasterDataHeader =
+                    auth()->user()->can('view products') ||
+                    auth()->user()->can('view suppliers') ||
+                    auth()->user()->can('view customers') ||
+                    auth()->user()->can('view settings') ||
+                    auth()->user()->can('view users') ||
+                    auth()->user()->can('view role');
+            @endphp
+
+            @if ($showMasterDataHeader)
+                <li class="sidebar-header">
+                    Master Data
+                </li>
+            @endif
 
             @if (auth()->user()->can('view products'))
                 <li class="sidebar-item {{ request()->is('dashboard/product*') ? 'active' : '' }}">
@@ -112,6 +143,7 @@
                     </a>
                 </li>
             @endif
+
         </ul>
 
     </div>

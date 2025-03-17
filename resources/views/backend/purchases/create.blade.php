@@ -149,7 +149,7 @@
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <label for="supplier_id" class="mb-2">Supplier</label>
-                                    <select name="supplier_id" id="supplier_id" class="form-control" required>
+                                    <select name="supplier_id" id="supplier_id" class="form-control">
                                         <option value="">Select Supplier</option>
                                         @foreach ($suppliers as $supplier)
                                             <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
@@ -308,7 +308,8 @@
                 total += parseFloat(input.value) || 0;
             });
 
-            const discount = total * 0.1;
+            // const discount = total * 0.1;
+            const discount = total * 0;
             const ppn = (total - discount) * 0.11;
             const grandTotal = total - discount + ppn;
 

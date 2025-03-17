@@ -57,7 +57,7 @@
                 <button onclick="applyDateFilter()" class="btn btn-primary">Apply</button>
             </div>
 
-            <div class="card flex-fill p-3" id="printableArea">
+            <div class="card flex-fill" id="printableArea">
                 <div class="table-responsive">
                     <table class="table table-hover my-0">
                         <thead>

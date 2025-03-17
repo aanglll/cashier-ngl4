@@ -66,7 +66,7 @@ class PurchaseController extends Controller
         ]);
 
         $validated = $request->validate([
-            'supplier_id' => 'required|exists:suppliers,id',
+            'supplier_id' => 'nullable|exists:suppliers,id',
             'discount' => 'nullable|numeric',
             'ppn' => 'nullable|numeric',
             'total_price' => 'required|numeric',
@@ -124,13 +124,23 @@ class PurchaseController extends Controller
         if (!auth()->user()->can('delete purchases')) {
             return redirect()->back()->with('error', 'You do not have permission to delete the purchase.');
         }
+
         $purchase = Purchase::findOrFail($id);
+        $purchaseDetails = PurchaseDetail::where('purchase_id', $purchase->id)->get();
+
+        foreach ($purchaseDetails as $detail) {
+            $product = Product::find($detail->product_id);
+
+            if ($product) {
+                $product->stock -= $detail->qty;
+                $product->save();
+            }
+        }
 
         PurchaseDetail::where('purchase_id', $purchase->id)->delete();
-
         $purchase->delete();
 
-        return redirect()->back()->with('success', 'Transaction successfully deleted');
+        return redirect()->back()->with('success', 'Transaction successfully deleted, stock has been updated.');
     }
 
     public function show($id)
