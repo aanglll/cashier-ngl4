@@ -17,6 +17,9 @@ class PurchaseController extends Controller
 {
     public function index()
     {
+        if (!auth()->user()->can('view purchases')) {
+            return redirect()->back()->with('error', 'You do not have permission to view the purchase.');
+        }
         $purchases = Purchase::latest()
             ->with(['user', 'supplier'])
             ->paginate(10);
@@ -33,6 +36,9 @@ class PurchaseController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->can('create purchases')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the purchase.');
+        }
         $suppliers = Supplier::latest()->paginate(10);
         $date = now()->format('d/m/Y');
         $purchaseCountToday = Purchase::whereDate('created_at', now()->toDateString())->count() + 1;
@@ -49,6 +55,9 @@ class PurchaseController extends Controller
 
     public function store(Request $request)
     {
+        if (!auth()->user()->can('create purchases')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the purchase.');
+        }
         $request->merge([
             'discount' => preg_replace('/[^0-9]/', '', $request->discount),
             'ppn' => preg_replace('/[^0-9]/', '', $request->ppn),
@@ -112,6 +121,9 @@ class PurchaseController extends Controller
 
     public function destroy($id)
     {
+        if (!auth()->user()->can('delete purchases')) {
+            return redirect()->back()->with('error', 'You do not have permission to delete the purchase.');
+        }
         $purchase = Purchase::findOrFail($id);
 
         PurchaseDetail::where('purchase_id', $purchase->id)->delete();
@@ -123,6 +135,9 @@ class PurchaseController extends Controller
 
     public function show($id)
     {
+        if (!auth()->user()->can('create purchases')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the purchase.');
+        }
         $purchase = Purchase::with(['user', 'supplier', 'purchaseDetails.product'])->findOrFail($id);
         $settings = Setting::first();
         return view('backend.purchases.show', compact('purchase', 'settings'));

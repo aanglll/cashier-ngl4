@@ -11,6 +11,9 @@ class StockController extends Controller
 {
     public function index()
     {
+        if (!auth()->user()->can('view stocks')) {
+            return redirect()->back()->with('error', 'You do not have permission to view the stock.');
+        }
         $stocks = Stock::with('product')->latest()->paginate(10);
         $settings = Setting::first();
         return view('backend.stocks.index', compact('stocks', 'settings'));
@@ -18,6 +21,9 @@ class StockController extends Controller
 
     public function destroy($id)
     {
+        if (!auth()->user()->can('delete stocks')) {
+            return redirect()->back()->with('error', 'You do not have permission to delete the stock.');
+        }
         $stock = Stock::findOrFail($id);
         $stock->delete();
 

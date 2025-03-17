@@ -18,6 +18,9 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
+        if (!auth()->user()->can('view dashboards')) {
+            return redirect()->back()->with('error', 'You do not have permission to view the dashboard.');
+        }
         $filter = $request->query('filter', 'today');
 
         $startDate = null;
@@ -87,6 +90,9 @@ class HomeController extends Controller
 
     public function product()
     {
+        if (!auth()->user()->can('view products')) {
+            return redirect()->back()->with('error', 'You do not have permission to view the product.');
+        }
         $settings = Setting::first();
         return view('backend.product.index', compact('settings'));
     }

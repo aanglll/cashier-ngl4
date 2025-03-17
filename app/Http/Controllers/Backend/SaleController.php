@@ -22,6 +22,9 @@ class SaleController extends Controller
 {
     public function index(Request $request)
     {
+        if (!auth()->user()->can('view sales')) {
+            return redirect()->back()->with('error', 'You do not have permission to view the sale.');
+        }
         $filter = $request->query('filter', 'today');
 
         $startDate = Carbon::now()->startOfDay();
@@ -90,6 +93,9 @@ class SaleController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->can('create sales')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the sale.');
+        }
         $customers = Customer::latest()->paginate(10);
         $date = now()->format('d/m/Y');
 
@@ -114,6 +120,9 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
+        if (!auth()->user()->can('create sales')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the sale.');
+        }
         $request->merge([
             'discount' => preg_replace('/[^0-9]/', '', $request->discount),
             'ppn' => preg_replace('/[^0-9]/', '', $request->ppn),
@@ -184,6 +193,9 @@ class SaleController extends Controller
 
     public function destroy($id)
     {
+        if (!auth()->user()->can('delete sales')) {
+            return redirect()->back()->with('error', 'You do not have permission to delete the sale.');
+        }
         $sale = Sale::findOrFail($id);
 
         $salesDetails = SalesDetail::where('sales_id', $sale->id)->get();
@@ -206,6 +218,9 @@ class SaleController extends Controller
 
     public function show($id)
     {
+        if (!auth()->user()->can('create sales')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the sale.');
+        }
         // Mencari penjualan berdasarkan ID dan memuat detail yang terkait
         $sale = Sale::with(['user', 'customer', 'salesDetails.product'])->findOrFail($id);
         $settings = Setting::first();

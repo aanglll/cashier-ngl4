@@ -125,7 +125,9 @@
         <div class="container-fluid p-0">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1 class="h3 mb-0"><strong>Create</strong> Sales</h1>
-                <a href="{{ route('backend.sales.index') }}" class="btn btn-secondary">Back to List</a>
+                @if (auth()->user()->can('view sales'))
+                    <a href="{{ route('backend.sales.index') }}" class="btn btn-secondary">Back to List</a>
+                @endif
             </div>
             <form action="{{ route('backend.sales.store') }}" method="POST">
                 @csrf
@@ -439,21 +441,21 @@
         // }
         document.getElementById('customer_id').addEventListener('change', calculateTotal);
 
-    function calculateTotal() {
-        let total = 0;
-        document.querySelectorAll('.subtotal').forEach(input => {
-            total += parseFloat(input.value) || 0;
-        });
+        function calculateTotal() {
+            let total = 0;
+            document.querySelectorAll('.subtotal').forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
 
-        const hasCustomer = document.getElementById('customer_id').value !== "";
-        const discount = hasCustomer ? total * 0.1 : 0;
-        const ppn = (total - discount) * 0.11;
-        const grandTotal = total - discount + ppn;
+            const hasCustomer = document.getElementById('customer_id').value !== "";
+            const discount = hasCustomer ? total * 0.1 : 0;
+            const ppn = (total - discount) * 0.11;
+            const grandTotal = total - discount + ppn;
 
-        document.getElementById('discount').value = formatRupiah(discount);
-        document.getElementById('ppn').value = formatRupiah(ppn);
-        document.getElementById('total_price').value = formatRupiah(grandTotal);
-    }
+            document.getElementById('discount').value = formatRupiah(discount);
+            document.getElementById('ppn').value = formatRupiah(ppn);
+            document.getElementById('total_price').value = formatRupiah(grandTotal);
+        }
 
         document.getElementById('cash_paid').addEventListener('input', function() {
             const cashPaid = parseFloat(this.value) || 0;

@@ -25,6 +25,14 @@
                 </li>
             @endif
 
+            @if (auth()->user()->hasRole('officer'))
+                <li class="sidebar-item {{ request()->is('dashboard/sales*') ? 'active' : '' }}">
+                    <a class="sidebar-link" href="{{ route('backend.sales.create') }}">
+                        <i class="align-middle" data-feather="log-out"></i> <span class="align-middle">Sale</span>
+                    </a>
+                </li>
+            @endif
+
             @if (auth()->user()->can('view purchases'))
                 <li class="sidebar-item {{ request()->is('dashboard/purchases*') ? 'active' : '' }}">
                     <a class="sidebar-link" href="{{ route('backend.purchases.index') }}">

@@ -13,6 +13,9 @@ class UserController extends Controller
 {
     public function index()
     {
+        if (!auth()->user()->can('view users')) {
+            return redirect()->back()->with('error', 'You do not have permission to view the user.');
+        }
         $users = User::where('id', '!=', 1)->latest()->paginate(10);
         $settings = Setting::first();
         return view('backend.user.index', compact('users', 'settings'));
@@ -20,12 +23,18 @@ class UserController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->can('create users')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the user.');
+        }
         $settings = Setting::first();
         return view('backend.user.create', compact('settings'));
     }
 
     public function store(Request $request)
     {
+        if (!auth()->user()->can('create users')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the user.');
+        }
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
@@ -57,6 +66,9 @@ class UserController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->can('edit users')) {
+            return redirect()->back()->with('error', 'You do not have permission to edit the user.');
+        }
         if ($id == 1) {
             abort(403, 'Unauthorized Access');
         }
@@ -68,6 +80,9 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        // if (!auth()->user()->can('edit users')) {
+        //     return redirect()->back()->with('error', 'You do not have permission to edit the user.');
+        // }
         $user = User::findOrFail($id);
 
         $request->validate([
@@ -91,9 +106,9 @@ class UserController extends Controller
         ]);
 
         // Update role user
-        if ($user->hasAnyRole(['superadmin', 'admin', 'officer', 'warehouse admin'])) {
-            $user->roles()->detach(); // Hapus role lama
-        }
+        // if ($user->hasAnyRole(['superadmin', 'admin', 'officer', 'warehouse admin'])) {
+        //     $user->roles()->detach(); // Hapus role lama
+        // }
 
         $role = Role::where('name', $request->user_priv)->first();
         if ($role) {
@@ -105,6 +120,9 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+        if (!auth()->user()->can('delete users')) {
+            return redirect()->back()->with('error', 'You do not have permission to delete the user.');
+        }
         if ($id == 1) {
             return redirect()->back()->with('error', 'This user cannot be deleted.');
         }

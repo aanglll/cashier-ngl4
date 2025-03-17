@@ -11,6 +11,9 @@ class ProductCategoryController extends Controller
 {
     public function index()
     {
+        if (!auth()->user()->can('view product categories')) {
+            return redirect()->back()->with('error', 'You do not have permission to view the product category.');
+        }
         $categories = ProductCategory::latest()->paginate(10);
         $settings = Setting::first();
         return view('backend.product.categories.index', compact('categories', 'settings'));
@@ -18,11 +21,17 @@ class ProductCategoryController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->can('create product categories')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the product category.');
+        }
         $settings = Setting::first();
         return view('backend.product.categories.create', compact('settings'));
     }
     public function store(Request $request)
     {
+        if (!auth()->user()->can('create product categories')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the product category.');
+        }
         $request->validate([
             'nama' => 'required|string|max:255',
             'status' => 'required|in:active,inactive',
@@ -38,6 +47,9 @@ class ProductCategoryController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->can('edit product categories')) {
+            return redirect()->back()->with('error', 'You do not have permission to edit the product category.');
+        }
         $settings = Setting::first();
         $category = ProductCategory::findOrFail($id);
         return view('backend.product.categories.edit', compact('category', 'settings'));
@@ -45,6 +57,9 @@ class ProductCategoryController extends Controller
 
     public function update(Request $request, $id)
     {
+        if (!auth()->user()->can('edit product categories')) {
+            return redirect()->back()->with('error', 'You do not have permission to edit the product category.');
+        }
         $request->validate([
             'nama' => 'required|string|max:255',
             'status' => 'required|in:active,inactive',
@@ -58,6 +73,9 @@ class ProductCategoryController extends Controller
 
     public function destroy($id)
     {
+        if (!auth()->user()->can('delete product categories')) {
+            return redirect()->back()->with('error', 'You do not have permission to delete the product category.');
+        }
         $category = ProductCategory::findOrFail($id);
 
         try {

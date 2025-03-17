@@ -11,6 +11,9 @@ class CustomerController extends Controller
 {
     public function index()
     {
+        if (!auth()->user()->can('view customers')) {
+            return redirect()->back()->with('error', 'You do not have permission to view the customer.');
+        }
         $customers = Customer::latest()->paginate(10);
         $settings = Setting::first();
         return view('backend.customer.index', compact('customers', 'settings'));
@@ -18,12 +21,18 @@ class CustomerController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->can('create customers')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the customer.');
+        }
         $settings = Setting::first();
         return view('backend.customer.create', compact('settings'));
     }
 
     public function store(Request $request)
     {
+        if (!auth()->user()->can('create customers')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the customer.');
+        }
         $validatedData = $request->validate([
             'name' => 'required|string|max:40',
             'address' => 'required|string',
@@ -41,6 +50,9 @@ class CustomerController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->can('edit customers')) {
+            return redirect()->back()->with('error', 'You do not have permission to edit the customer.');
+        }
         $customer = Customer::findOrFail($id);
         $settings = Setting::first();
         return view('backend.customer.edit', compact('customer', 'settings'));
@@ -48,6 +60,9 @@ class CustomerController extends Controller
 
     public function update(Request $request, $id)
     {
+        if (!auth()->user()->can('edit customers')) {
+            return redirect()->back()->with('error', 'You do not have permission to edit the customer.');
+        }
         $request->validate([
             'name' => 'required|string|max:40',
             'address' => 'required|string',
@@ -62,6 +77,9 @@ class CustomerController extends Controller
 
     public function destroy($id)
     {
+        if (!auth()->user()->can('delete customers')) {
+            return redirect()->back()->with('error', 'You do not have permission to delete the customer.');
+        }
         $customer = Customer::findOrFail($id);
         $customer->delete();
 

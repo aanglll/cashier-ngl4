@@ -6,7 +6,12 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1 class="h3 mb-0"><strong>Invoice</h1>
                 <a href="javascript:void(0);" class="btn btn-primary" onclick="printReceipt()">Print this receipt</a>
-                <a href="{{ route('backend.sales.index') }}" class="btn btn-secondary">Back to List</a>
+                @if (auth()->user()->can('view sales'))
+                    <a href="{{ route('backend.sales.index') }}" class="btn btn-secondary">Back to List</a>
+                @endif
+                @if (auth()->user()->hasRole('officer'))
+                    <a href="{{ route('backend.sales.create') }}" class="btn btn-secondary">Create new sales</a>
+                @endif
             </div>
 
             <div class="row">
@@ -47,7 +52,7 @@
                             </div>
 
 
-                            <hr class="my-4"/>
+                            <hr class="my-4" />
                             <div class="table-responsive">
                                 <table class="table table-sm">
                                     <thead>

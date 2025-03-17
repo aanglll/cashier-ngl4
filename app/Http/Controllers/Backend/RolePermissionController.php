@@ -12,6 +12,9 @@ class RolePermissionController extends Controller
 {
     public function index()
     {
+        if (!auth()->user()->can('view role')) {
+            return redirect()->back()->with('error', 'You do not have permission to view the role.');
+        }
         $roles = Role::where('id', '!=', 1)->latest()->paginate(10);
         $settings = Setting::first();
         return view('backend.role-permission.index', compact('roles', 'settings'));
@@ -19,6 +22,9 @@ class RolePermissionController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->can('create role')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the role.');
+        }
         $permissions = Permission::all();
         $role = new Role();
 
@@ -27,6 +33,9 @@ class RolePermissionController extends Controller
 
     public function store(Request $request)
     {
+        if (!auth()->user()->can('create role')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the role.');
+        }
         $request->validate([
             'name' => 'required|string|unique:roles,name|max:255',
             'guard_name' => 'required|string',
@@ -47,6 +56,9 @@ class RolePermissionController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->can('edit role')) {
+            return redirect()->back()->with('error', 'You do not have permission to edit the role.');
+        }
         $role = Role::findOrFail($id);
         $permissions = Permission::all();
         $settings = Setting::first();
@@ -56,6 +68,9 @@ class RolePermissionController extends Controller
 
     public function update(Request $request, $id)
     {
+        if (!auth()->user()->can('edit role')) {
+            return redirect()->back()->with('error', 'You do not have permission to edit the role.');
+        }
         $role = Role::findOrFail($id);
 
         $request->validate([
@@ -76,6 +91,9 @@ class RolePermissionController extends Controller
 
     public function destroy($id)
     {
+        if (!auth()->user()->can('delete role')) {
+            return redirect()->back()->with('error', 'You do not have permission to delete the role.');
+        }
         $role = Role::findOrFail($id);
 
         // Pastikan role dengan ID 1 (biasanya superadmin) tidak bisa dihapus

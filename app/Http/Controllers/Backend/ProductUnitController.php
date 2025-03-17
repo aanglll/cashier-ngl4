@@ -11,6 +11,9 @@ class ProductUnitController extends Controller
 {
     public function index()
     {
+        if (!auth()->user()->can('view product units')) {
+            return redirect()->back()->with('error', 'You do not have permission to view the product unit.');
+        }
         $productUnits = ProductUnit::latest()->paginate(10);
         $settings = Setting::first();
         return view('backend.product.units.index', compact('productUnits', 'settings'));
@@ -18,12 +21,18 @@ class ProductUnitController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->can('create product units')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the product unit.');
+        }
         $settings = Setting::first();
         return view('backend.product.units.create', compact('settings'));
     }
 
     public function store(Request $request)
     {
+        if (!auth()->user()->can('create product units')) {
+            return redirect()->back()->with('error', 'You do not have permission to create the product unit.');
+        }
         $request->validate([
             'name' => 'required|string|max:255',
             'status' => 'required|in:active,inactive',
@@ -36,6 +45,9 @@ class ProductUnitController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->can('edit product units')) {
+            return redirect()->back()->with('error', 'You do not have permission to edit the product unit.');
+        }
         $settings = Setting::first();
         $productUnit = ProductUnit::findOrFail($id);
         return view('backend.product.units.edit', compact('productUnit', 'settings'));
@@ -43,6 +55,9 @@ class ProductUnitController extends Controller
 
     public function update(Request $request, $id)
     {
+        if (!auth()->user()->can('edit product units')) {
+            return redirect()->back()->with('error', 'You do not have permission to edit the product unit.');
+        }
         $request->validate([
             'name' => 'required|string|max:255',
             'status' => 'required|in:active,inactive',
@@ -55,12 +70,14 @@ class ProductUnitController extends Controller
     }
 
     public function destroy($id)
-{
-    $productUnit = ProductUnit::findOrFail($id);
+    {
+        if (!auth()->user()->can('delete product units')) {
+            return redirect()->back()->with('error', 'You do not have permission to delete the product unit.');
+        }
+        $productUnit = ProductUnit::findOrFail($id);
 
-    $productUnit->delete();
+        $productUnit->delete();
 
-    return redirect()->route('backend.product.units.index')->with('success', 'Product unit deleted successfully.');
-}
-
+        return redirect()->route('backend.product.units.index')->with('success', 'Product unit deleted successfully.');
+    }
 }

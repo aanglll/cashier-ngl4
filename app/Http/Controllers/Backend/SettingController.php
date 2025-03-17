@@ -11,12 +11,18 @@ class SettingController extends Controller
 {
     public function edit()
     {
+        if (!auth()->user()->can('view settings')) {
+            return redirect()->back()->with('error', 'You do not have permission to view the setting.');
+        }
         $settings = Setting::first();
         return view('backend.setting.edit', compact('settings'));
     }
 
     public function update(Request $request)
     {
+        if (!auth()->user()->can('edit settings')) {
+            return redirect()->back()->with('error', 'You do not have permission to edit the setting.');
+        }
         $request->validate([
             'site_name' => 'required|string|max:255',
             'site_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,ico,webp,avif|max:2048',
