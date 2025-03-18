@@ -202,16 +202,69 @@ class PurchaseController extends Controller
         return view('backend.purchases.show', compact('purchase', 'settings'));
     }
 
-    public function exportPDF()
+    // public function exportPDF()
+    // {
+    //     $purchases = Purchase::all();
+
+    //     $pdf = Pdf::loadView('backend.purchases.pdf', compact('purchases'));
+    //     return $pdf->stream('purchases.pdf');
+    // }
+
+    public function exportPDF(Request $request)
     {
-        $purchases = Purchase::all();
+        \Log::info('Export PDF Request:', $request->all());
+
+        $query = Purchase::query();
+
+        // Jika tidak ada filter, set default ke "today"
+        $filter = $request->filter ?? 'today';
+
+        switch ($filter) {
+            case 'today':
+                $query->whereDate('created_at', now());
+                break;
+            case 'yesterday':
+                $query->whereDate('created_at', now()->subDay());
+                break;
+            case 'this_week':
+                $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+                break;
+            case 'last_week':
+                $query->whereBetween('created_at', [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()]);
+                break;
+            case 'this_month':
+                $query->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year);
+                break;
+            case 'last_month':
+                $query->whereMonth('created_at', now()->subMonth()->month)->whereYear('created_at', now()->subMonth()->year);
+                break;
+            case 'this_year':
+                $query->whereYear('created_at', now()->year);
+                break;
+            case 'last_year':
+                $query->whereYear('created_at', now()->subYear()->year);
+                break;
+            case 'time_span':
+                if ($request->has('start_date') && $request->has('end_date')) {
+                    $query->whereBetween('created_at', [$request->start_date, $request->end_date]);
+                }
+                break;
+        }
+
+        $purchases = $query->get();
+
+        \Log::info('Filtered Purchase Count:', ['count' => $purchases->count()]); // Debugging log
 
         $pdf = Pdf::loadView('backend.purchases.pdf', compact('purchases'));
-        return $pdf->stream('purchases.pdf');
+        return $pdf->download('purchases_report.pdf');
     }
 
-    public function exportExcel()
+    public function exportExcel(Request $request)
     {
-        return Excel::download(new PurchasesExport(), 'purchases.xlsx');
+        $filter = $request->query('filter', 'today');
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        return Excel::download(new PurchasesExport($filter, $startDate, $endDate), 'purchases.xlsx');
     }
 }

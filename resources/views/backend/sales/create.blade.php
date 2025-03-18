@@ -324,6 +324,10 @@
         });
 
         function addProductToTable(barcode, name, price, stock) {
+            if (stock === 0) {
+                alert('Stock Out!');
+                return;
+            }
             let existingRow = document.querySelector(`.product-barcode[data-barcode="${barcode}"]`);
 
             if (existingRow) {

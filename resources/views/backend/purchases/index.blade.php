@@ -7,13 +7,13 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1 class="h3 mb-0"><strong>Purchase</strong> Management</h1>
                 <div>
-                    <a href="{{ route('backend.purchases.export-excel') }}" class="btn btn-secondary">
+                    <a href="{{ route('backend.purchases.export-excel', request()->all()) }}" class="btn btn-secondary">
                         Export to Excel <i data-feather="file-plus"></i>
                     </a>
                     <a href="javascript:void(0);" class="btn btn-secondary" onclick="printReceipt()">
                         Print <i data-feather="printer"></i>
                     </a>
-                    <a href="{{ route('backend.purchases.exportPDF') }}" class="btn btn-secondary">
+                    <a href="{{ route('backend.purchases.exportPDF', request()->all()) }}" class="btn btn-secondary">
                          Export to PDF <i data-feather="book"></i>
                     </a>
                     <a href="{{ route('backend.purchases.create') }}" class="btn btn-primary">

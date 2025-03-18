@@ -109,8 +109,9 @@ class SaleController extends Controller
                 $query->where('status', 'active');
             },
         ])
-            ->latest()
-            ->paginate(10);
+        ->where('stock', '>', 0) // Hanya produk dengan stok lebih dari 0
+        ->latest()
+        ->paginate(10);
         $categories = ProductCategory::where('status', 'active')->get();
         $productUnits = ProductUnit::where('status', 'active')->get();
         $settings = Setting::first();
@@ -230,14 +231,59 @@ class SaleController extends Controller
 
     public function exportPDF(Request $request)
     {
-        $sales = Sale::all();
+        \Log::info('Export PDF Request:', $request->all());
+
+        $query = Sale::query();
+
+        // Jika tidak ada filter, set default ke "today"
+        $filter = $request->filter ?? 'today';
+
+        switch ($filter) {
+            case 'today':
+                $query->whereDate('created_at', now());
+                break;
+            case 'yesterday':
+                $query->whereDate('created_at', now()->subDay());
+                break;
+            case 'this_week':
+                $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+                break;
+            case 'last_week':
+                $query->whereBetween('created_at', [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()]);
+                break;
+            case 'this_month':
+                $query->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year);
+                break;
+            case 'last_month':
+                $query->whereMonth('created_at', now()->subMonth()->month)->whereYear('created_at', now()->subMonth()->year);
+                break;
+            case 'this_year':
+                $query->whereYear('created_at', now()->year);
+                break;
+            case 'last_year':
+                $query->whereYear('created_at', now()->subYear()->year);
+                break;
+            case 'time_span':
+                if ($request->has('start_date') && $request->has('end_date')) {
+                    $query->whereBetween('created_at', [$request->start_date, $request->end_date]);
+                }
+                break;
+        }
+
+        $sales = $query->get();
+
+        \Log::info('Filtered Sales Count:', ['count' => $sales->count()]); // Debugging log
 
         $pdf = Pdf::loadView('backend.sales.pdf', compact('sales'));
         return $pdf->download('sales_report.pdf');
     }
 
-    public function exportExcel()
+    public function exportExcel(Request $request)
     {
-        return Excel::download(new SalesExport(), 'sales.xlsx');
+        $filter = $request->query('filter', 'today');
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        return Excel::download(new SalesExport($filter, $startDate, $endDate), 'sales.xlsx');
     }
 }
