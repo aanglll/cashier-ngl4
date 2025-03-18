@@ -12,15 +12,64 @@ use App\Models\ProductCategory;
 use App\Models\ProductUnit;
 use App\Models\Setting;
 use App\Models\Stock;
+use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\PurchasesExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PurchaseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if (!auth()->user()->can('view purchases')) {
             return redirect()->back()->with('error', 'You do not have permission to view the purchase.');
         }
-        $purchases = Purchase::latest()
+        $filter = $request->query('filter', 'today');
+
+        $startDate = Carbon::now()->startOfDay();
+        $endDate = Carbon::now()->endOfDay();
+
+        switch ($filter) {
+            case 'yesterday':
+                $startDate = Carbon::now()->subDay()->startOfDay();
+                $endDate = Carbon::now()->subDay()->endOfDay();
+                break;
+            case 'this_week':
+                $startDate = Carbon::now()->startOfWeek();
+                $endDate = Carbon::now()->endOfWeek();
+                break;
+            case 'last_week':
+                $startDate = Carbon::now()->subWeek()->startOfWeek();
+                $endDate = Carbon::now()->subWeek()->endOfWeek();
+                break;
+            case 'this_month':
+                $startDate = Carbon::now()->startOfMonth();
+                $endDate = Carbon::now()->endOfMonth();
+                break;
+            case 'last_month':
+                $startDate = Carbon::now()->subMonth()->startOfMonth();
+                $endDate = Carbon::now()->subMonth()->endOfMonth();
+                break;
+            case 'this_month_last_year':
+                $startDate = Carbon::now()->subYear()->startOfMonth();
+                $endDate = Carbon::now()->subYear()->endOfMonth();
+                break;
+            case 'this_year':
+                $startDate = Carbon::now()->startOfYear();
+                $endDate = Carbon::now()->endOfYear();
+                break;
+            case 'last_year':
+                $startDate = Carbon::now()->subYear()->startOfYear();
+                $endDate = Carbon::now()->subYear()->endOfYear();
+                break;
+            case 'time_span':
+                if ($request->has(['start_date', 'end_date'])) {
+                    $startDate = Carbon::parse($request->query('start_date'));
+                    $endDate = Carbon::parse($request->query('end_date'));
+                }
+                break;
+        }
+        $purchases = Purchase::whereBetween('created_at', [$startDate, $endDate])
             ->with(['user', 'supplier'])
             ->paginate(10);
         $suppliers = Supplier::latest()->paginate(10);
@@ -151,5 +200,18 @@ class PurchaseController extends Controller
         $purchase = Purchase::with(['user', 'supplier', 'purchaseDetails.product'])->findOrFail($id);
         $settings = Setting::first();
         return view('backend.purchases.show', compact('purchase', 'settings'));
+    }
+
+    public function exportPDF()
+    {
+        $purchases = Purchase::all();
+
+        $pdf = Pdf::loadView('backend.purchases.pdf', compact('purchases'));
+        return $pdf->stream('purchases.pdf');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new PurchasesExport(), 'purchases.xlsx');
     }
 }

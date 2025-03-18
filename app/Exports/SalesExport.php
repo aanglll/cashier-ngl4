@@ -10,8 +10,9 @@ class SalesExport implements FromCollection, WithHeadings
 {
     public function collection()
     {
-        return Sale::with(['customer', 'user'])->get()->map(function ($sale) {
+        return Sale::with(['customer', 'user'])->get()->map(function ($sale, $index) {
             return [
+                'No' => $index + 1,
                 'Date' => $sale->created_at->format('Y-m-d H:i:s'),
                 'Customer' => $sale->customer->name ?? '-',
                 'User' => $sale->user->name,
@@ -22,6 +23,6 @@ class SalesExport implements FromCollection, WithHeadings
 
     public function headings(): array
     {
-        return ["Date", "Customer", "User", "Total Price"];
+        return ["No", "Date", "Customer", "User", "Total Price"];
     }
 }
