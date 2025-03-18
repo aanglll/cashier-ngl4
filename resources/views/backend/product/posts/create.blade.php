@@ -15,7 +15,7 @@
                         @csrf
                         <div class="row">
                             <div class="form-group mb-3 col-md-4">
-                                <label for="product_name">Product Name</label>
+                                <label for="product_name">Product Name <span style="color: red;">*</span></label>
                                 <input type="text" name="product_name" id="product_name"
                                     class="form-control mt-2 @error('product_name') is-invalid @enderror"
                                     value="{{ old('product_name') }}" placeholder="Enter product name" required>
@@ -24,7 +24,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3 col-md-4">
-                                <label for="id_category">Product Categories</label>
+                                <label for="id_category">Product Categories <span style="color: red;">*</span></label>
                                 <select name="id_category" id="id_category"
                                     class="form-control mt-2 @error('id_category') is-invalid @enderror" required>
                                     <option value="" disabled selected>Select Category</option>
@@ -40,9 +40,9 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3 col-md-4">
-                                <label for="product_units">Product Units</label>
+                                <label for="product_units">Product Units <span style="color: red;">*</span></label>
                                 <select name="product_units" id="product_units"
-                                    class="form-control mt-2 @error('product_units') is-invalid @enderror">
+                                    class="form-control mt-2 @error('product_units') is-invalid @enderror" required>
                                     <option value="">Select Product Unit</option>
                                     @foreach ($productUnits as $unit)
                                         <option value="{{ $unit->id }}"
@@ -59,7 +59,7 @@
                         </div>
                         <div class="row">
                             <div class="form-group mb-3 col-md-4">
-                                <label for="purchase_price">Purchase Price</label>
+                                <label for="purchase_price">Purchase Price <span style="color: red;">*</span></label>
                                 <input type="number" step="0.01" name="purchase_price" id="purchase_price"
                                     class="form-control mt-2 @error('purchase_price') is-invalid @enderror"
                                     value="{{ old('purchase_price') }}" placeholder="Enter purchase price" required>
@@ -68,7 +68,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3 col-md-4">
-                                <label for="selling_price">Selling Price</label>
+                                <label for="selling_price">Selling Price <span style="color: red;">*</span></label>
                                 <input type="number" step="0.01" name="selling_price" id="selling_price"
                                     class="form-control mt-2 @error('selling_price') is-invalid @enderror"
                                     value="{{ old('selling_price') }}" placeholder="Enter selling price" required>
@@ -77,7 +77,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3 col-md-4 d-none">
-                                <label for="stock">Stock</label>
+                                <label for="stock">Stock <span style="color: red;">*</span></label>
                                 <input type="number" name="stock" id="stock"
                                     class="form-control mt-2 @error('stock') is-invalid @enderror" value="0"
                                     placeholder="Enter stock">
@@ -86,10 +86,10 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3 col-md-4">
-                                <label for="barcode">Barcode</label>
+                                <label for="barcode">Barcode <span style="color: red;">*</span></label>
                                 <input type="text" name="barcode" id="barcode"
                                     class="form-control mt-2 @error('barcode') is-invalid @enderror"
-                                    value="{{ old('barcode') }}" placeholder="Enter product barcode">
+                                    value="{{ old('barcode') }}" placeholder="Enter product barcode" required>
                                 @error('barcode')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
