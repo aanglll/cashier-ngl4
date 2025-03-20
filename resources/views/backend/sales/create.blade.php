@@ -243,6 +243,7 @@
                                         <th>No</th>
                                         <th>Product</th>
                                         <th>Price</th>
+                                        <th>Discount</th>
                                         <th>Qty</th>
                                         <th>Stock</th>
                                         <th>Subtotal</th>
@@ -292,9 +293,11 @@
                 const id = productElement.dataset.id;
                 const name = productElement.dataset.name;
                 const price = parseFloat(productElement.dataset.price);
+                const before_discount = parseFloat(productElement.dataset.before_discount);
+                const discount_product = parseInt(productElement.dataset.discount_product);
                 const stock = parseInt(productElement.dataset.stock);
 
-                addProductToTable(barcode, name, price, stock);
+                addProductToTable(barcode, name, price, before_discount, discount_product, stock);
             } else {
                 alert('Produk tidak ditemukan!');
             }
@@ -310,7 +313,7 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                addProductToTable(data.product.barcode, data.product.name, data.product.price,
+                                addProductToTable(data.product.barcode, data.product.name, data.product.price, data.product.before_discount, data.product.discount_product,
                                     data.product.stock);
                             } else {
                                 alert('Produk tidak ditemukan!');
@@ -323,7 +326,7 @@
             }
         });
 
-        function addProductToTable(barcode, name, price, stock) {
+        function addProductToTable(barcode, name, price, before_discount, discount_product, stock) {
             if (stock === 0) {
                 alert('Stock Out!');
                 return;
@@ -353,8 +356,13 @@
                             <input type="hidden" name="product_name[]" value="${name}">
                         </td>
                         <td>
-                            <span class="product-price">${formatRupiah(price)}</span>
+                            <span class="product-price">${before_discount}->${formatRupiah(price)}</span>
+                            <input type="hidden" name="before_discount[]" value="${before_discount}">
                             <input type="hidden" name="selling_price[]" value="${price}">
+                        </td>
+                        <td>
+                            <span class="product-discount">${discount_product}%</span>
+                            <input type="hidden" name="discount_product[]" value="${discount_product}">
                         </td>
                         <td>
                             <input type="number" name="qty[]" class="form-control qty" required
@@ -383,12 +391,15 @@
 
         document.body.addEventListener('click', function(e) {
             if (e.target.classList.contains('select-product')) {
+                console.log(e.target)
                 const barcode = e.target.dataset.barcode;
                 const name = e.target.dataset.name;
                 const price = parseFloat(e.target.dataset.price);
+                const before_discount = parseFloat(e.target.dataset.before_discount);
+                const discount_product = parseInt(e.target.dataset.discount_product);
                 const stock = parseInt(e.target.dataset.stock);
 
-                addProductToTable(barcode, name, price, stock);
+                addProductToTable(barcode, name, price, before_discount, discount_product, stock);
             }
         });
 

@@ -15,6 +15,7 @@
                     <th>Product Name</th>
                     <th>Category</th>
                     <th>Price</th>
+                    <th>Discount</th>
                     <th>Stock</th>
                     <th>Action</th>
                 </tr>
@@ -24,12 +25,19 @@
                     <tr>
                         <td>{{ $product->product_name }}</td>
                         <td>{{ $product->category->nama }}</td>
-                        <td>{{ number_format($product->selling_price, 0, ',', '.') }}</td>
+                        <td>
+                            @if($product->discount_product && $product->discount_product > 0)
+                                {{ number_format($product->before_discount, 0, ',', '.') }} -> {{ number_format($product->selling_price, 0, ',', '.') }}
+                            @else
+                                {{ number_format($product->selling_price, 0, ',', '.') }}
+                            @endif
+                        </td>
+                        <td>{{ $product->discount_product ? $product->discount_product . '%' : '-' }}</td>
                         <td>{{ $product->stock }}</td>
                         <td>
                             <button type="button" class="btn btn-primary select-product" data-id="{{ $product->id }}"
                                 data-name="{{ $product->product_name }}" data-price="{{ $product->selling_price }}"
-                                data-barcode="{{ $product->barcode }}" data-stock="{{ $product->stock }}">
+                                data-barcode="{{ $product->barcode }}" data-stock="{{ $product->stock }}" data-discount_product="{{ $product->discount_product }}" data-before_discount="{{ $product->before_discount }}">
                                 Select
                             </button>
                         </td>

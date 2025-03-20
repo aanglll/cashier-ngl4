@@ -27,7 +27,7 @@ class SalesProductModal extends Component
     public function render()
     {
         $query = Product::with('category')
-        ->where('stock', '>', 0)
+        // ->where('stock', '>', 0)
         ;
 
         // Filter berdasarkan kategori terlebih dahulu

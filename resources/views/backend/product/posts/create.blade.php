@@ -68,11 +68,11 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3 col-md-4">
-                                <label for="selling_price">Selling Price <span style="color: red;">*</span></label>
-                                <input type="number" step="0.01" name="selling_price" id="selling_price"
-                                    class="form-control mt-2 @error('selling_price') is-invalid @enderror"
-                                    value="{{ old('selling_price') }}" placeholder="Enter selling price" required>
-                                @error('selling_price')
+                                <label for="stock">Selling Price <span style="color: red;">*</span></label>
+                                <input type="number" name="before_discount" id="before_discount"
+                                    class="form-control mt-2 @error('before_discount') is-invalid @enderror"
+                                    placeholder="Enter Selling Price" required>
+                                @error('before_discount')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -86,6 +86,26 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3 col-md-4">
+                                <label for="discount_product">Discount % <span style="color: red;">*</span></label>
+                                <input type="number" name="discount_product" id="discount_product"
+                                    class="form-control mt-2 @error('discount_product') is-invalid @enderror" value="0"
+                                    min="0" max="100" placeholder="Enter product discount" required>
+                                @error('discount_product')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group mb-3 col-md-6">
+                                <label for="selling_price">Total Selling Price <span style="color: red;">*</span></label>
+                                <input type="number" step="0.01" name="selling_price" id="selling_price"
+                                    class="form-control mt-2 @error('selling_price') is-invalid @enderror"
+                                    value="{{ old('selling_price') }}" required readonly>
+                                @error('selling_price')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-3 col-md-6">
                                 <label for="barcode">Barcode <span style="color: red;">*</span></label>
                                 <input type="text" name="barcode" id="barcode"
                                     class="form-control mt-2 @error('barcode') is-invalid @enderror"
@@ -95,7 +115,6 @@
                                 @enderror
                             </div>
                         </div>
-
                         <div class="form-group mb-3">
                             <label for="description">Description</label>
                             <textarea name="description" id="description" class="form-control mt-2 @error('description') is-invalid @enderror"
@@ -112,4 +131,32 @@
             </div>
         </div>
     </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const beforeDiscountInput = document.getElementById("before_discount");
+            const discountInput = document.getElementById("discount_product");
+            const sellingPriceInput = document.getElementById("selling_price");
+
+            function calculateSellingPrice() {
+                let beforeDiscount = parseFloat(beforeDiscountInput.value) || 0;
+                let discount = parseFloat(discountInput.value) || 0;
+
+                // Ensure discount is between 0 and 100
+                if (discount < 0) discount = 0;
+                if (discount > 100) discount = 100;
+                discountInput.value = discount;
+
+                let discountedPrice = beforeDiscount - (beforeDiscount * (discount / 100));
+                sellingPriceInput.value = discountedPrice.toFixed(0);
+            }
+
+            beforeDiscountInput.addEventListener("input", calculateSellingPrice);
+            discountInput.addEventListener("input", function() {
+                if (this.value < 0) this.value = 0;
+                if (this.value > 100) this.value = 100;
+                calculateSellingPrice();
+            });
+        });
+    </script>
 @endsection

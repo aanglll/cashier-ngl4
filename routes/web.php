@@ -129,6 +129,8 @@ Route::get('/get-product-by-barcode/{barcode}', function ($barcode) {
                 'barcode' => $product->barcode,
                 'name' => $product->product_name,
                 'price' => number_format($product->selling_price, 0, '.', ''),
+                'before_discount' => number_format($product->before_discount, 0, '.', ''),
+                'discount_product' => $product->discount_product,
                 'stock' => $product->stock,
             ],
         ]);

@@ -109,7 +109,7 @@ class SaleController extends Controller
                 $query->where('status', 'active');
             },
         ])
-        ->where('stock', '>', 0) // Hanya produk dengan stok lebih dari 0
+        // ->where('stock', '>', 0) // Hanya produk dengan stok lebih dari 0
         ->latest()
         ->paginate(10);
         $categories = ProductCategory::where('status', 'active')->get();
@@ -140,6 +140,10 @@ class SaleController extends Controller
             'cash_return' => 'required|numeric',
             'product_name' => 'required|array|min:1',
             'product_name.*' => 'exists:products,product_name',
+            'before_discount' => 'required|array|min:0',
+            'before_discount.*' => 'numeric',
+            'discount_product' => 'required|array|min:0',
+            'discount_product.*' => 'numeric|min:0',
             'selling_price' => 'required|array|min:1',
             'selling_price.*' => 'numeric',
             'qty' => 'required|array|min:1',
@@ -172,6 +176,8 @@ class SaleController extends Controller
                 'sales_id' => $sale->id,
                 'product_id' => $product->id,
                 'selling_price' => $request->selling_price[$index],
+                'before_discount' => $request->before_discount[$index],
+                'discount_product' => $request->discount_product[$index],
                 'qty' => $request->qty[$index],
                 'sub_total' => $request->sub_total[$index],
             ]);

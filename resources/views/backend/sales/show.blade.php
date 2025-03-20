@@ -66,7 +66,16 @@
                                     <tbody>
                                         @foreach ($sale->salesDetails as $index => $detail)
                                             <tr>
-                                                <td>{{ $detail->product->product_name }}</td>
+                                                @if ($detail->discount_product != 0)
+                                                    <td>{{ $detail->product->product_name }}<br>
+                                                        {{ number_format($detail->before_discount, 0, ',', '.') }} -
+                                                        {{ $detail->discount_product }}%
+                                                    </td>
+                                                @else
+                                                    <td>{{ $detail->product->product_name }}<br>
+                                                        {{ number_format($detail->before_discount, 0, ',', '.') }}
+                                                    </td>
+                                                @endif
                                                 <td>{{ number_format($detail->selling_price, 0, ',', '.') }}</td>
                                                 <td>{{ $detail->qty }}</td>
                                                 <td class="text-end">{{ number_format($detail->sub_total, 0, ',', '.') }}
