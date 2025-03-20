@@ -299,7 +299,7 @@
 
                 addProductToTable(barcode, name, price, before_discount, discount_product, stock);
             } else {
-                alert('Produk tidak ditemukan!');
+                alert('Product not found!');
             }
         }
 
@@ -316,7 +316,7 @@
                                 addProductToTable(data.product.barcode, data.product.name, data.product.price, data.product.before_discount, data.product.discount_product,
                                     data.product.stock);
                             } else {
-                                alert('Produk tidak ditemukan!');
+                                alert('Product not found!');
                             }
                         })
                         .catch(error => console.error('Error:', error));
@@ -338,7 +338,7 @@
                 let newQty = parseInt(qtyInput.value) + 1;
 
                 if (newQty > stock) {
-                    alert('Stok tidak cukup!');
+                    alert('Out of stock!');
                     return;
                 }
 
